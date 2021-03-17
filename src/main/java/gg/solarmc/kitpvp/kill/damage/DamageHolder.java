@@ -1,10 +1,10 @@
-package gg.solar.kitpvp;
+package gg.solarmc.kitpvp.kill.damage;
 
+import gg.solarmc.kitpvp.KitpvpPlugin;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -40,10 +40,10 @@ public class DamageHolder {
 
     /**
      * Returns all players who damaged this damageholder in the last 10 seconds
-     * @return all players
+     * @return an immutable set containing all the damagers
      */
     public Set<Player> getDamagers() {
-        return this.damagers.keySet();
+        return Set.copyOf(damagers.keySet());
     }
 
     /**
@@ -53,7 +53,7 @@ public class DamageHolder {
      */
     public Set<Player> getAssists(Player killer) {
         //streem api bad says big man (replace this later if necessary, i doubt it)
-        return this.damagers.keySet().stream().filter(player -> !player.equals(killer)).collect(Collectors.toUnmodifiableSet());
+        return getDamagers().stream().filter(player -> !player.equals(killer)).collect(Collectors.toUnmodifiableSet());
     }
 
 }

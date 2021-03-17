@@ -43,6 +43,10 @@
                             <pattern>com.github.stefvanschie.inventoryframework</pattern>
                             <shadedPattern>gg.solarmc.kitpvp-spigot.inventoryframework</shadedPattern>
                         </relocation>
+                        <relocation>
+                            <pattern>me.aurium.beetle</pattern>
+                            <shadedPattern>gg.solarmc.kitpvp-solar</shadedPattern>
+                        </relocation>
                     </relocations>
                 </configuration>
                 <executions>
@@ -85,23 +89,8 @@
         </dependency>
         <dependency>
             <groupId>me.aurium</groupId>
-            <artifactId>beetle-core</artifactId>
-            <version>0.2.4</version>
-        </dependency>
-        <dependency>
-            <groupId>me.aurium</groupId>
-            <artifactId>beetle-core-default</artifactId>
-            <version>0.2.8</version>
-        </dependency>
-        <dependency>
-            <groupId>me.aurium</groupId>
             <artifactId>beetle-spigot-impl</artifactId>
-            <version>0.1.6</version>
-        </dependency>
-        <dependency>
-            <groupId>space.arim.dazzleconf</groupId>
-            <artifactId>dazzleconf-core</artifactId>
-            <version>1.1.0</version>
+            <version>0.2.1</version>
         </dependency>
         <dependency>
             <groupId>space.arim.dazzleconf</groupId>

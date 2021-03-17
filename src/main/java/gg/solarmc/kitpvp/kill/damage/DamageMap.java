@@ -1,13 +1,13 @@
-package gg.solar.kitpvp;
+package gg.solarmc.kitpvp.kill.damage;
 
-import me.aurium.beetle.core.config.DataHolder;
+import gg.solarmc.kitpvp.KitpvpPlugin;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Map of all players to their respective holders.
+ * Map of all players to their respective holders. No need for concurrency.
  */
 public class DamageMap {
 

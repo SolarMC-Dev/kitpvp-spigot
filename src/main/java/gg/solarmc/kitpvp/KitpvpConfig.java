@@ -1,4 +1,4 @@
-package gg.solar.kitpvp;
+package gg.solarmc.kitpvp;
 
 import space.arim.dazzleconf.annote.ConfDefault;
 import space.arim.dazzleconf.annote.ConfKey;

@@ -1,5 +1,7 @@
-package gg.solar.kitpvp;
+package gg.solarmc.kitpvp;
 
+import gg.solarmc.kitpvp.kill.DamageListener;
+import gg.solarmc.kitpvp.kill.damage.DamageMap;
 import gg.solarmc.loader.DataCenter;
 import gg.solarmc.loader.clans.ClanManager;
 import gg.solarmc.loader.clans.ClansKey;
@@ -8,6 +10,8 @@ import gg.solarmc.loader.kitpvp.KitPvpManager;
 import me.aurium.beetle.spigot.SpigotBeetle;
 import me.aurium.beetle.spigot.SpigotBeetleFactory;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import javax.activation.DataHandler;
 
 //TODO decoupling
 public class KitpvpPlugin extends JavaPlugin {

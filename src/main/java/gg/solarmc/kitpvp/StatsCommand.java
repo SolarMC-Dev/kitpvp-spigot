@@ -1,4 +1,4 @@
-package gg.solar.kitpvp;
+package gg.solarmc.kitpvp;
 
 import me.aurium.beetle.core.command.AbstractCommand;
 import me.aurium.beetle.spigot.command.SpigotCommandData;
