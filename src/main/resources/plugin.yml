@@ -7,3 +7,5 @@ version: 0.1.0
 authors:
   - Aurium / Aesthetik
 
+softdepend:
+  - PlaceholderAPI

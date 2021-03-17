@@ -4,6 +4,7 @@ import gg.solarmc.kitpvp.kill.DamageListener;
 import gg.solarmc.kitpvp.kill.KillModule;
 import gg.solarmc.kitpvp.kill.damage.DamageMap;
 import gg.solarmc.kitpvp.messaging.MessageConfig;
+import gg.solarmc.kitpvp.stat.PlaceholderAPIHook;
 import gg.solarmc.kitpvp.stat.StatCommand;
 import gg.solarmc.loader.DataCenter;
 import gg.solarmc.loader.clans.ClanManager;
@@ -45,6 +46,11 @@ public class KitpvpPlugin extends JavaPlugin {
 
        //man why use a SimpleCommand when you can use branch... NOT! (too lazy to finish branch framework rn, i'll update when possible.)
        spigotBeetle.getCommandRegistry().registerCommand(new StatCommand(configs.getMessageConfig(), getServer().getDataCenter()));
+
+       //papi shit
+        if (getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+            new PlaceholderAPIHook(this).register();
+        }
     }
 
 
