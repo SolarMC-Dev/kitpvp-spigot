@@ -41,4 +41,15 @@ public interface MessageConfig {
     @ConfDefault.DefaultStrings("[CHAT]You helped %s die!")
     List<String> getDeathMessageAssist();
 
+    @ConfKey("messages.stats.stat_message")
+    @ConfDefault.DefaultStrings({
+            "[CHAT]Your kills: %KILLS%",
+            "[CHAT]Your deaths: %DEATHS%",
+            "[CHAT]Your exp: %EXP%",
+            "[CHAT]Your assists: %ASSISTS%",
+            "[CHAT]Your level: %LEVEL%",
+            "[CHAT]Your KDA: %KDA%"
+    })
+    List<String> getStatMessage();
+
 }

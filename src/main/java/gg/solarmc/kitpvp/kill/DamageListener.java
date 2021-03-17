@@ -1,5 +1,6 @@
 package gg.solarmc.kitpvp.kill;
 
+import gg.solarmc.kitpvp.KitpvpConfig;
 import gg.solarmc.kitpvp.kill.damage.DamageMap;
 import gg.solarmc.kitpvp.messaging.MessageConfig;
 import gg.solarmc.kitpvp.messaging.MessageController;
@@ -22,9 +23,15 @@ public class DamageListener implements Listener {
 
     private final DamageMap damageMap;
     private final KillDataHandler killDataHandler;
-
     private final MessageConfig messageConfig;
+    private final KitpvpConfig config;
 
+    public DamageListener(DamageMap damageMap, KillDataHandler killDataHandler, MessageConfig messageConfig, KitpvpConfig config) {
+        this.damageMap = damageMap;
+        this.killDataHandler = killDataHandler;
+        this.messageConfig = messageConfig;
+        this.config = config;
+    }
 
     @EventHandler //honk
     public void onDamage(EntityDamageByEntityEvent event) {

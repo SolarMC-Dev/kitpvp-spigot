@@ -31,7 +31,9 @@ public class MessageController {
         return new Message(message,List.of(new ColorParser(),parser));
     }
 
-
+    public static Message statType(List<String> message, StatParser statParser) {
+        return new Message(message,List.of(new ColorParser(),statParser));
+    }
 
 
 

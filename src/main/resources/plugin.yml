@@ -1,0 +1,9 @@
+main: gg.solarmc.kitpvp.KitpvpPlugin
+
+name: SolarKitPVP
+
+version: 0.1.0
+
+authors:
+  - Aurium / Aesthetik
+

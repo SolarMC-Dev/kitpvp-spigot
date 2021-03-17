@@ -27,7 +27,10 @@
             <id>solar-releases</id>
             <url>https://mvn-repo.platinum-mc.com/snapshots</url>
         </repository>
-
+        <repository>
+            <id>placeholderapi</id>
+            <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
+        </repository>
     </repositories>
 
     <build>
@@ -39,10 +42,6 @@
                 <configuration>
                     <dependencyReducedPomLocation>${project.build.directory}/dependency-reduced-pom.xml</dependencyReducedPomLocation>
                     <relocations>
-                        <relocation>
-                            <pattern>com.github.stefvanschie.inventoryframework</pattern>
-                            <shadedPattern>gg.solarmc.kitpvp-spigot.inventoryframework</shadedPattern>
-                        </relocation>
                         <relocation>
                             <pattern>me.aurium.beetle</pattern>
                             <shadedPattern>gg.solarmc.kitpvp-solar</shadedPattern>
@@ -98,9 +97,9 @@
             <version>1.1.0</version>
         </dependency>
         <dependency>
-            <groupId>com.github.stefvanschie.inventoryframework</groupId>
-            <artifactId>IF</artifactId>
-            <version>0.9.4</version>
+            <groupId>me.clip</groupId>
+            <artifactId>placeholderapi</artifactId>
+            <version>2.10.9</version>
         </dependency>
     </dependencies>
     

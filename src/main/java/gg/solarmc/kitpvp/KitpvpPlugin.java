@@ -1,7 +1,10 @@
 package gg.solarmc.kitpvp;
 
 import gg.solarmc.kitpvp.kill.DamageListener;
+import gg.solarmc.kitpvp.kill.KillModule;
 import gg.solarmc.kitpvp.kill.damage.DamageMap;
+import gg.solarmc.kitpvp.messaging.MessageConfig;
+import gg.solarmc.kitpvp.stat.StatCommand;
 import gg.solarmc.loader.DataCenter;
 import gg.solarmc.loader.clans.ClanManager;
 import gg.solarmc.loader.clans.ClansKey;
@@ -10,50 +13,38 @@ import gg.solarmc.loader.kitpvp.KitPvpManager;
 import me.aurium.beetle.spigot.SpigotBeetle;
 import me.aurium.beetle.spigot.SpigotBeetleFactory;
 import org.bukkit.plugin.java.JavaPlugin;
+import space.arim.dazzleconf.ConfigurationOptions;
+import space.arim.dazzleconf.ext.snakeyaml.SnakeYamlConfigurationFactory;
+import space.arim.dazzleconf.helper.ConfigurationHelper;
 
 import javax.activation.DataHandler;
 
 //TODO decoupling
 public class KitpvpPlugin extends JavaPlugin {
+    private Configs configs;
 
-    private DataCenter dataCenter;
+    private KillModule module;
 
-    private KitPvpManager kitPvpManager;
-    private ClanManager clanManager;
-
-    private DataHandler dataHandler;
-    private RewardHandler rewardHandler;
-    private DamageMap damageMap;
-
+    private final DamageMap damageMap = new DamageMap(this);
     private final SpigotBeetle spigotBeetle = new SpigotBeetleFactory(this,false).build();
+
 
     @Override
     public void onEnable() {
-       this.dataCenter = this.getServer().getDataCenter();
-       this.kitPvpManager = this.dataCenter.getDataManager(KitPvpKey.INSTANCE);
-       this.clanManager = this.dataCenter.getDataManager(ClansKey.INSTANCE);
+       this.configs = new Configs(
+               new ConfigurationHelper<>(this.getDataFolder().toPath(), "config.yml",
+               new SnakeYamlConfigurationFactory<>(KitpvpConfig.class, ConfigurationOptions.defaults())),
 
-       this.dataHandler = new DataHandler(dataCenter,kitPvpManager,clanManager);
-       this.rewardHandler = new RewardHandler();
-       this.damageMap = new DamageMap(this);
+               new ConfigurationHelper<>(this.getDataFolder().toPath(), "config.yml",
+                       new SnakeYamlConfigurationFactory<>(MessageConfig.class, ConfigurationOptions.defaults()))
+               );
 
-       this.getServer().getPluginManager().registerEvents(new DamageListener(this,dataHandler, damageMap,rewardHandler),this);
-    }
+       configs.loadTry();
 
-    public DataCenter getDataCenter() {
-        return dataCenter;
-    }
+       module = new KillModule(this, configs.getConfig(), configs.getMessageConfig(), getServer().getDataCenter()).initializeListeners();
 
-    public KitPvpManager getKitPvpManager() {
-        return kitPvpManager;
-    }
-
-    public ClanManager getClanManager() {
-        return clanManager;
-    }
-
-    public SpigotBeetle getBeetle() {
-        return spigotBeetle;
+       //man why use a SimpleCommand when you can use branch... NOT! (too lazy to finish branch framework rn, i'll update when possible.)
+       spigotBeetle.getCommandRegistry().registerCommand(new StatCommand(configs.getMessageConfig(), getServer().getDataCenter()));
     }
 
 

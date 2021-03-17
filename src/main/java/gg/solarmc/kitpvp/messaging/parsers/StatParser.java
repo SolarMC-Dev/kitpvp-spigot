@@ -4,7 +4,7 @@ import gg.solarmc.kitpvp.messaging.Parser;
 
 public class StatParser implements Parser {
 
-    public StatParser(int kills, int deaths, int assists, int experience, int current_killstreak, int highest_killstreak, int level) {
+    public StatParser(int kills, int deaths, int assists, int experience, int current_killstreak, int highest_killstreak, int level, double kda) {
         this.kills = kills;
         this.deaths = deaths;
         this.assists = assists;
@@ -12,6 +12,7 @@ public class StatParser implements Parser {
         this.current_killstreak = current_killstreak;
         this.highest_killstreak = highest_killstreak;
         this.level = level;
+        this.kda = kda;
     }
 
     private final int kills;
@@ -20,6 +21,7 @@ public class StatParser implements Parser {
     private final int experience;
     private final int current_killstreak;
     private final int highest_killstreak;
+    private final double kda;
 
     private final int level;
 
@@ -33,6 +35,7 @@ public class StatParser implements Parser {
                 .replaceAll("%EXP%",String.valueOf(experience))
                 .replaceAll("%CUR_KILLSTREAK%",String.valueOf(current_killstreak))
                 .replaceAll("%HIGH_KILLSTREAK%",String.valueOf(highest_killstreak))
-                .replaceAll("%LEVEL%",String.valueOf(level));
+                .replaceAll("%LEVEL%",String.valueOf(level))
+                .replaceAll("%KDA%",String.valueOf(kda));
     }
 }
