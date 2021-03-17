@@ -38,16 +38,22 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.1.0</version>
+                <version>3.2.4</version>
                 <configuration>
                     <dependencyReducedPomLocation>${project.build.directory}/dependency-reduced-pom.xml</dependencyReducedPomLocation>
+                    <finalName>${project.name}-${project.version}</finalName>
                     <relocations>
                         <relocation>
                             <pattern>me.aurium.beetle</pattern>
-                            <shadedPattern>gg.solarmc.kitpvp-solar</shadedPattern>
+                            <shadedPattern>${project.artifactId}.libs.beetle</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>space.arim.dazzleconf</pattern>
+                            <shadedPattern>${project.artifactId}.libs.dazzleconf</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
+
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -65,31 +71,36 @@
             <groupId>gg.solarmc</groupId>
             <artifactId>solarpaper-api</artifactId>
             <version>1.12.2-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>gg.solarmc.loader</groupId>
             <artifactId>loader-core</artifactId>
             <version>0.3.0</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>gg.solarmc.loader</groupId>
             <artifactId>loader-mod-kitpvp</artifactId>
             <version>0.3.0</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>gg.solarmc.loader</groupId>
             <artifactId>loader-mod-clans</artifactId>
             <version>0.3.0</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>gg.solarmc.loader</groupId>
             <artifactId>loader-mod-credits</artifactId>
             <version>0.3.0</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>me.aurium</groupId>
             <artifactId>beetle-spigot-impl</artifactId>
-            <version>0.2.1</version>
+            <version>0.2.3</version>
         </dependency>
         <dependency>
             <groupId>space.arim.dazzleconf</groupId>
@@ -100,6 +111,7 @@
             <groupId>me.clip</groupId>
             <artifactId>placeholderapi</artifactId>
             <version>2.10.9</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
     

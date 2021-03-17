@@ -1,24 +1,16 @@
 package gg.solarmc.kitpvp;
 
-import gg.solarmc.kitpvp.kill.DamageListener;
 import gg.solarmc.kitpvp.kill.KillModule;
 import gg.solarmc.kitpvp.kill.damage.DamageMap;
 import gg.solarmc.kitpvp.messaging.MessageConfig;
 import gg.solarmc.kitpvp.stat.PlaceholderAPIHook;
 import gg.solarmc.kitpvp.stat.StatCommand;
-import gg.solarmc.loader.DataCenter;
-import gg.solarmc.loader.clans.ClanManager;
-import gg.solarmc.loader.clans.ClansKey;
-import gg.solarmc.loader.kitpvp.KitPvpKey;
-import gg.solarmc.loader.kitpvp.KitPvpManager;
 import me.aurium.beetle.spigot.SpigotBeetle;
 import me.aurium.beetle.spigot.SpigotBeetleFactory;
 import org.bukkit.plugin.java.JavaPlugin;
 import space.arim.dazzleconf.ConfigurationOptions;
 import space.arim.dazzleconf.ext.snakeyaml.SnakeYamlConfigurationFactory;
 import space.arim.dazzleconf.helper.ConfigurationHelper;
-
-import javax.activation.DataHandler;
 
 //TODO decoupling
 public class KitpvpPlugin extends JavaPlugin {
@@ -46,6 +38,8 @@ public class KitpvpPlugin extends JavaPlugin {
 
        //man why use a SimpleCommand when you can use branch... NOT! (too lazy to finish branch framework rn, i'll update when possible.)
        spigotBeetle.getCommandRegistry().registerCommand(new StatCommand(configs.getMessageConfig(), getServer().getDataCenter()));
+
+       spigotBeetle.getCommandRegistry();
 
        //papi shit
         if (getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
