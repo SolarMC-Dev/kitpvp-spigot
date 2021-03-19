@@ -2,7 +2,6 @@ package gg.solarmc.kitpvp.messaging;
 
 import org.bukkit.entity.Player;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;

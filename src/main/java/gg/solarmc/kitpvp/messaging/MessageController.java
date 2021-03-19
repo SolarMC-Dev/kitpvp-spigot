@@ -1,5 +1,7 @@
 package gg.solarmc.kitpvp.messaging;
 
+import gg.solarmc.kitpvp.messaging.parsers.SinglePlayerParser;
+import gg.solarmc.kitpvp.messaging.parsers.PairPlayerParser;
 import gg.solarmc.kitpvp.messaging.parsers.*;
 
 import java.util.List;

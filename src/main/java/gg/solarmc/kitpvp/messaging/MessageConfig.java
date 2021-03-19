@@ -1,7 +1,5 @@
 package gg.solarmc.kitpvp.messaging;
 
-import gg.solarmc.kitpvp.messaging.parsers.ColorParser;
-import org.bukkit.entity.Player;
 import space.arim.dazzleconf.annote.ConfDefault;
 import space.arim.dazzleconf.annote.ConfKey;
 

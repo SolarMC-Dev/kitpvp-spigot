@@ -1,22 +1,17 @@
 package gg.solarmc.kitpvp.kill;
 
 import gg.solarmc.kitpvp.KitpvpConfig;
-import gg.solarmc.kitpvp.kill.damage.DamageMap;
 import gg.solarmc.kitpvp.messaging.MessageConfig;
 import gg.solarmc.kitpvp.messaging.MessageController;
 import gg.solarmc.kitpvp.messaging.parsers.PairPlayerParser;
 import gg.solarmc.kitpvp.messaging.parsers.SinglePlayerParser;
-import gg.solarmc.loader.DataCenter;
-import gg.solarmc.loader.kitpvp.KitPvpKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import space.arim.omnibus.util.concurrent.CentralisedFuture;
 
-import java.util.Optional;
 import java.util.Set;
 
 public class DamageListener implements Listener {

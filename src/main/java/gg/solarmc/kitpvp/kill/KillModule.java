@@ -2,7 +2,6 @@ package gg.solarmc.kitpvp.kill;
 
 import gg.solarmc.kitpvp.KitpvpConfig;
 import gg.solarmc.kitpvp.KitpvpPlugin;
-import gg.solarmc.kitpvp.kill.damage.DamageMap;
 import gg.solarmc.kitpvp.messaging.MessageConfig;
 import gg.solarmc.loader.DataCenter;
 

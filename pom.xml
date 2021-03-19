@@ -100,7 +100,7 @@
         <dependency>
             <groupId>me.aurium</groupId>
             <artifactId>beetle-spigot-impl</artifactId>
-            <version>0.2.3</version>
+            <version>0.4.1</version>
         </dependency>
         <dependency>
             <groupId>space.arim.dazzleconf</groupId>

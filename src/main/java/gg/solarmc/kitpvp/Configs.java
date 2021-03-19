@@ -2,9 +2,7 @@ package gg.solarmc.kitpvp;
 
 import gg.solarmc.kitpvp.messaging.MessageConfig;
 import me.aurium.beetle.api.file.UncheckedIOException;
-import space.arim.dazzleconf.ConfigurationOptions;
 import space.arim.dazzleconf.error.InvalidConfigException;
-import space.arim.dazzleconf.ext.snakeyaml.SnakeYamlConfigurationFactory;
 import space.arim.dazzleconf.helper.ConfigurationHelper;
 
 import java.io.IOException;

@@ -1,7 +1,7 @@
 package gg.solarmc.kitpvp;
 
+import gg.solarmc.kitpvp.kill.DamageMap;
 import gg.solarmc.kitpvp.kill.KillModule;
-import gg.solarmc.kitpvp.kill.damage.DamageMap;
 import gg.solarmc.kitpvp.messaging.MessageConfig;
 import gg.solarmc.kitpvp.stat.PlaceholderAPIHook;
 import gg.solarmc.kitpvp.stat.StatCommand;

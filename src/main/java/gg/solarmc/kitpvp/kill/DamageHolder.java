@@ -1,4 +1,4 @@
-package gg.solarmc.kitpvp.kill.damage;
+package gg.solarmc.kitpvp.kill;
 
 import gg.solarmc.kitpvp.KitpvpPlugin;
 import org.bukkit.entity.Player;
