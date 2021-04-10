@@ -1,17 +1,17 @@
 package gg.solarmc.kitpvp.kill;
 
 import gg.solarmc.kitpvp.KitpvpPlugin;
-import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Map of all players to their respective holders. No need for concurrency.
  */
-public class DamageMap {
+public class DamageMap implements DamageClosable{
 
-    private Map<Player, DamageHolder> handlerMap;
+    private Map<UUID, DamageHolder> handlerMap;
     private KitpvpPlugin plugin;
 
     public DamageMap(KitpvpPlugin plugin) {
@@ -19,18 +19,26 @@ public class DamageMap {
         this.handlerMap = new HashMap<>();
     }
 
-    public void trackDamage(Player damager, Player damaged) {
-        handlerMap.computeIfAbsent(damaged,(ignored) -> new DamageHolder(plugin)).damage(damager);
+    public void trackDamage(UUID damager, UUID damaged) {
+        this.getHolder(damaged).damage(damager);
     }
 
     /**
      * Puts a new damageholder in the internal map to wipe data
-     * Called on kill or logout
+     * Called on kill
      *
      * @param wiped the person who is to have their damageholder wiped
      */
-    public void wipeHolder(Player wiped) {
+    public void wipeHolder(UUID wiped) {
         handlerMap.put(wiped,new DamageHolder(plugin));
+    }
+
+    public void removeHolder(UUID wiped) {
+        handlerMap.remove(wiped);
+
+        handlerMap.values().forEach(holder -> {
+            holder.removeHolder(wiped);
+        });
     }
 
     /**
@@ -38,7 +46,7 @@ public class DamageMap {
      * @param key the player
      * @return a new dataholder
      */
-    public DamageHolder getHolder(Player key) {
+    public DamageHolder getHolder(UUID key) {
         return handlerMap.computeIfAbsent(key, (ignored) -> new DamageHolder(plugin));
     }
 
