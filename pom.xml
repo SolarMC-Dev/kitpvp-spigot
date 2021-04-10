@@ -10,7 +10,7 @@
     <parent>
         <groupId>gg.solarmc</groupId>
         <artifactId>solar-parent</artifactId>
-        <version>0.4.0</version>
+        <version>0.5.4</version>
     </parent>
 
     <properties>
@@ -24,8 +24,8 @@
             <url>https://repo.repsy.io/mvn/elytraforce/default</url>
         </repository>
         <repository>
-            <id>solar-releases</id>
-            <url>https://mvn-repo.platinum-mc.com/snapshots</url>
+            <id>solar-rekt</id>
+            <url>https://mvn-repo.platinum-mc.com/releases</url>
         </repository>
         <repository>
             <id>placeholderapi</id>
@@ -33,73 +33,25 @@
         </repository>
     </repositories>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.4</version>
-                <configuration>
-                    <dependencyReducedPomLocation>${project.build.directory}/dependency-reduced-pom.xml</dependencyReducedPomLocation>
-                    <finalName>${project.name}-${project.version}</finalName>
-                    <relocations>
-                        <relocation>
-                            <pattern>me.aurium.beetle</pattern>
-                            <shadedPattern>${project.artifactId}.libs.beetle</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>space.arim.dazzleconf</pattern>
-                            <shadedPattern>${project.artifactId}.libs.dazzleconf</shadedPattern>
-                        </relocation>
-                    </relocations>
-                </configuration>
-
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
-
     <dependencies>
         <dependency>
             <groupId>gg.solarmc</groupId>
             <artifactId>solarpaper-api</artifactId>
             <version>1.12.2-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>gg.solarmc.loader</groupId>
-            <artifactId>loader-core</artifactId>
-            <version>0.3.0</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>gg.solarmc.loader</groupId>
             <artifactId>loader-mod-kitpvp</artifactId>
-            <version>0.3.0</version>
-            <scope>provided</scope>
+            <version>0.4.1</version>
         </dependency>
         <dependency>
             <groupId>gg.solarmc.loader</groupId>
             <artifactId>loader-mod-clans</artifactId>
-            <version>0.3.0</version>
-            <scope>provided</scope>
+            <version>0.4.1</version>
         </dependency>
         <dependency>
             <groupId>gg.solarmc.loader</groupId>
             <artifactId>loader-mod-credits</artifactId>
-            <version>0.3.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>me.aurium</groupId>
-            <artifactId>beetle-spigot-impl</artifactId>
             <version>0.4.1</version>
         </dependency>
         <dependency>
@@ -111,7 +63,6 @@
             <groupId>me.clip</groupId>
             <artifactId>placeholderapi</artifactId>
             <version>2.10.9</version>
-            <scope>provided</scope>
         </dependency>
     </dependencies>
     

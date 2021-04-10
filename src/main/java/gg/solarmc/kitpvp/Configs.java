@@ -1,7 +1,6 @@
 package gg.solarmc.kitpvp;
 
 import gg.solarmc.kitpvp.messaging.MessageConfig;
-import me.aurium.beetle.api.file.UncheckedIOException;
 import space.arim.dazzleconf.error.InvalidConfigException;
 import space.arim.dazzleconf.helper.ConfigurationHelper;
 
@@ -22,17 +21,15 @@ public class Configs {
         this.messageHelper = messageHelper;
     }
 
-    public void load() throws IOException, InvalidConfigException {
-        this.config = kitpvpHelper.reloadConfigData();
-        this.messageConfig = messageHelper.reloadConfigData();
-    }
+    public void load() {
 
-    public void loadTry() {
         try {
-            load();
+            this.config = kitpvpHelper.reloadConfigData();
+            this.messageConfig = messageHelper.reloadConfigData();
         } catch (IOException | InvalidConfigException e) {
-            throw new UncheckedIOException(e);
+            throw new IllegalStateException(e);
         }
+
     }
 
     public KitpvpConfig getConfig() {

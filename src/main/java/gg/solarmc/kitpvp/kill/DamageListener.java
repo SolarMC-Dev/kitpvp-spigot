@@ -30,10 +30,7 @@ public class DamageListener implements Listener {
 
     @EventHandler //honk
     public void onDamage(EntityDamageByEntityEvent event) {
-        if (event.getEntity() instanceof Player && event.getDamager() instanceof Player) {
-
-            Player damaged = (Player) event.getEntity();
-            Player damager = (Player) event.getDamager();
+        if (event.getEntity() instanceof Player damaged && event.getDamager() instanceof Player damager) {
 
             damageMap.trackDamage(damager,damaged);
         }

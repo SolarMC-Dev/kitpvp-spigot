@@ -4,11 +4,11 @@ import gg.solarmc.kitpvp.messaging.Parser;
 
 public class KillstreakParser implements Parser {
 
+    private final String streakAmount;
+
     public KillstreakParser(String streakAmount) {
         this.streakAmount = streakAmount;
     }
-
-    private final String streakAmount;
 
     @Override
     public String apply(String s) {

@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -53,7 +54,16 @@ public class DamageHolder {
      */
     public Set<Player> getAssists(Player killer) {
         //streem api bad says big man (replace this later if necessary, i doubt it)
-        return getDamagers().stream().filter(player -> !player.equals(killer)).collect(Collectors.toUnmodifiableSet());
+
+        Set<Player> pepee = new HashSet<>();
+
+        for (Player player : damagers.keySet()) {
+            if (!player.equals(killer)) {
+                pepee.add(killer);
+            }
+        }
+
+        return pepee;
     }
 
 }

@@ -2,9 +2,8 @@ package gg.solarmc.kitpvp.messaging;
 
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class Message {
 
@@ -18,15 +17,19 @@ public class Message {
 
     public void target(Player player) {
 
-        Stream<String> stream = strings.stream();
+        List<String> modified = new ArrayList<>();
 
-        for (Parser parser : parserList) {
-            stream = stream.map(parser);
+        for (String string : strings) {
+            String moddy = string;
+
+            for (Parser parser : parserList) {
+                moddy = parser.apply(moddy);
+            }
+
+            modified.add(moddy);
         }
 
-        List<String> strings = stream.collect(Collectors.toList());
-
-        for (String parsed : strings) {
+        for (String parsed : modified) {
             Prefix.message(player,parsed);
         }
 

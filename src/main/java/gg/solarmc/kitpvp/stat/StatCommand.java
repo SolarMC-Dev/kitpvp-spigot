@@ -6,16 +6,21 @@ import gg.solarmc.kitpvp.messaging.parsers.StatParser;
 import gg.solarmc.loader.DataCenter;
 import gg.solarmc.loader.kitpvp.KitPvpKey;
 import gg.solarmc.loader.kitpvp.OnlineKitPvp;
-import me.aurium.beetle.api.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 //simple command because i cannot be arsed to finish Branch Framework right now
 
+
+
+//TODO reimplement this on Branch 1.0 launch
+
+
 /**
  * TODO: simple command that tells the stats of the sender. Once api changes and branch framework are done, move this to a Branch-style system
  * where you can also see the stats of an existing player.
  */
+/*
 public class StatCommand implements Command<CommandSender> {
 
     private final MessageConfig messageConfig;
@@ -58,3 +63,4 @@ public class StatCommand implements Command<CommandSender> {
     }
 
 }
+*/
