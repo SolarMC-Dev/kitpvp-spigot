@@ -1,6 +1,7 @@
 package gg.solarmc.kitpvp.kill;
 
 import gg.solarmc.kitpvp.KitpvpConfig;
+import gg.solarmc.kitpvp.kill.result.KillResult;
 import gg.solarmc.loader.DataCenter;
 import gg.solarmc.loader.credits.CreditsKey;
 import gg.solarmc.loader.kitpvp.KitPvpKey;
@@ -13,18 +14,21 @@ import java.util.Set;
 
 public class KillDataHandler {
 
+    private final DataCenter center;
+    private final KitpvpConfig config;
+
     public KillDataHandler(DataCenter center, KitpvpConfig config) {
         this.center = center;
         this.config = config;
     }
 
-    private final DataCenter center;
-    private final KitpvpConfig config;
-
-    CentralisedFuture<?> handleKill(Player killer, Player killed, Set<Player> assisters) {
-        return center.runTransact(transaction -> {
+    CentralisedFuture<KillResult> handleKill(Player killer, Player killed, Set<Player> assisters) {
+        return center.transact(transaction -> {
             killer.getSolarPlayer().getData(KitPvpKey.INSTANCE).addKills(transaction,1);
+            killer.getSolarPlayer().getData(KitPvpKey.INSTANCE).addKillstreaks(transaction,1);
             killed.getSolarPlayer().getData(KitPvpKey.INSTANCE).addDeaths(transaction,1);
+            killed.getSolarPlayer().getData(KitPvpKey.INSTANCE).resetCurrentKillstreaks(transaction);
+            killed.getSolarPlayer().getData(KitPvpKey.INSTANCE).addExperience(transaction,1);
 
             //add assists
             for (Player assister : assisters) {
@@ -36,12 +40,15 @@ public class KillDataHandler {
             //reset killed's killstreak
 
             killer.getSolarPlayer().getData(CreditsKey.INSTANCE).depositBalance(transaction, BigDecimal.valueOf(config.killMoney()));
+
+            return new KillResult(false);
         });
     }
 
     CentralisedFuture<?> handleDeath(Player killed, Set<Player> assisters) {
         return center.runTransact(transaction -> {
             killed.getSolarPlayer().getData(KitPvpKey.INSTANCE).addDeaths(transaction,1);
+            killed.getSolarPlayer().getData(KitPvpKey.INSTANCE).resetCurrentKillstreaks(transaction);
 
             //add assists
             for (Player assister : assisters) {

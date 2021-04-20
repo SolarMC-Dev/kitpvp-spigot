@@ -5,6 +5,7 @@ import gg.solarmc.kitpvp.messaging.MessageConfig;
 import gg.solarmc.kitpvp.messaging.MessageController;
 import gg.solarmc.kitpvp.messaging.parsers.PairPlayerParser;
 import gg.solarmc.kitpvp.messaging.parsers.SinglePlayerParser;
+import gg.solarmc.kitpvp.util.Logging;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -44,10 +45,11 @@ public class DamageListener implements Listener {
         if (killer != null) {
             Set<Player> immutableAssisters = damageMap.getHolder(killed).getAssists(killer);
 
-            killDataHandler.handleKill(killer,killed,immutableAssisters);
+            killDataHandler.handleKill(killer,killed,immutableAssisters).whenComplete(Logging.INSTANCE);
+
+            //messaging
 
             PairPlayerParser parser = new PairPlayerParser(killer,killed);
-
             MessageController.killType(messageConfig.getKillMessageKiller(),parser).target(killer);
             MessageController.killType(messageConfig.getKillMessageKilled(),parser).target(killed);
 
@@ -57,10 +59,10 @@ public class DamageListener implements Listener {
         } else {
             Set<Player> immutableAssisters = damageMap.getHolder(killed).getDamagers();
 
-            killDataHandler.handleDeath(killed,immutableAssisters);
+            killDataHandler.handleDeath(killed,immutableAssisters).whenComplete(Logging.INSTANCE);
+            //messaging
 
             SinglePlayerParser parser = new SinglePlayerParser(killed);
-
             MessageController.deathType(messageConfig.getDeathMessageKilled(),parser).target(killed);
 
             for (Player player : immutableAssisters) {
@@ -76,7 +78,7 @@ public class DamageListener implements Listener {
 
     @EventHandler
     public void onLeave(PlayerQuitEvent event) {
-        damageMap.wipeHolder(event.getPlayer());
+        damageMap.close(event.getPlayer());
     }
 
 }

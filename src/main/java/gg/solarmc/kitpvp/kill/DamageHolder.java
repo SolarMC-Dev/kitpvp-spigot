@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class DamageHolder {
+public class DamageHolder implements DamageClosable {
 
     private final KitpvpPlugin plugin;
     private final Map<Player, BukkitTask> damagers;
@@ -66,4 +66,8 @@ public class DamageHolder {
         return pepee;
     }
 
+    @Override
+    public void close(Player player) {
+        this.damagers.remove(player);
+    }
 }

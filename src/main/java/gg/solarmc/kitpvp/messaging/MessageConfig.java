@@ -31,6 +31,10 @@ public interface MessageConfig {
     @ConfDefault.DefaultStrings("[CHAT]You helped %s kill %s!")
     List<String> getKillMessageAssist();
 
+    @ConfKey("messages.kill.level_message")
+    @ConfDefault.DefaultStrings("[CHAT]You leveled up to level %s!")
+    List<String> getKillMessageLevel();
+
     @ConfKey("messages.death.killed_message")
     @ConfDefault.DefaultStrings("[CHAT]You died!")
     List<String> getDeathMessageKilled();

@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * Map of all players to their respective holders. No need for concurrency.
  */
-public class DamageMap {
+public class DamageMap implements DamageClosable {
 
     private Map<Player, DamageHolder> handlerMap;
     private KitpvpPlugin plugin;
@@ -25,7 +25,7 @@ public class DamageMap {
 
     /**
      * Puts a new damageholder in the internal map to wipe data
-     * Called on kill or logout
+     * Called on kill or death
      *
      * @param wiped the person who is to have their damageholder wiped
      */
@@ -43,7 +43,8 @@ public class DamageMap {
     }
 
 
-
-
-
+    @Override
+    public void close(Player player) {
+        this.handlerMap.remove(player).close(player);
+    }
 }

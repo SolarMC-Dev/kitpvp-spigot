@@ -1,6 +1,7 @@
 package gg.solarmc.kitpvp.stat;
 
 import gg.solarmc.kitpvp.KitpvpPlugin;
+import gg.solarmc.kitpvp.kill.levelling.LevelUtil;
 import gg.solarmc.loader.kitpvp.KitPvpKey;
 import gg.solarmc.loader.kitpvp.OnlineKitPvp;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
@@ -42,6 +43,7 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
             case "deaths" -> String.valueOf(pvp.currentDeaths());
             case "assists" -> String.valueOf(pvp.currentAssists());
             case "kda" -> String.valueOf(pvp.currentKills() / pvp.currentDeaths());
+            case "level" -> String.valueOf(LevelUtil.getLevel(pvp.currentExperience()));
             default -> "";
         };
 

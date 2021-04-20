@@ -1,5 +1,6 @@
 package gg.solarmc.kitpvp;
 
+import gg.solarmc.kitpvp.kill.levelling.LevelConfig;
 import gg.solarmc.kitpvp.messaging.MessageConfig;
 import space.arim.dazzleconf.error.InvalidConfigException;
 import space.arim.dazzleconf.helper.ConfigurationHelper;
@@ -12,13 +13,16 @@ public class Configs {
 
     private final ConfigurationHelper<KitpvpConfig> kitpvpHelper;
     private final ConfigurationHelper<MessageConfig> messageHelper;
+    private final ConfigurationHelper<LevelConfig> levelHelper;
 
     private KitpvpConfig config;
     private MessageConfig messageConfig;
+    private LevelConfig levelConfig;
 
-    public Configs(ConfigurationHelper<KitpvpConfig> kitpvpHelper, ConfigurationHelper<MessageConfig> messageHelper) {
+    public Configs(ConfigurationHelper<KitpvpConfig> kitpvpHelper, ConfigurationHelper<MessageConfig> messageHelper, ConfigurationHelper<LevelConfig> levelHelper) {
         this.kitpvpHelper = kitpvpHelper;
         this.messageHelper = messageHelper;
+        this.levelHelper = levelHelper;
     }
 
     public void load() {
@@ -26,6 +30,7 @@ public class Configs {
         try {
             this.config = kitpvpHelper.reloadConfigData();
             this.messageConfig = messageHelper.reloadConfigData();
+            this.levelHelper.reloadConfigData();
         } catch (IOException | InvalidConfigException e) {
             throw new IllegalStateException(e);
         }
