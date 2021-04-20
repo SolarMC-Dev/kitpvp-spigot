@@ -1,11 +1,12 @@
 package gg.solarmc.kitpvp.kill;
 
-import gg.solarmc.kitpvp.KitpvpConfig;
+import gg.solarmc.kitpvp.Util;
 import gg.solarmc.kitpvp.messaging.MessageConfig;
 import gg.solarmc.kitpvp.messaging.MessageController;
 import gg.solarmc.kitpvp.messaging.parsers.PairPlayerParser;
 import gg.solarmc.kitpvp.messaging.parsers.SinglePlayerParser;
 import gg.solarmc.kitpvp.util.Logging;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -14,36 +15,38 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.Set;
+import java.util.UUID;
 
 public class DamageListener implements Listener {
 
+    private final Server server;
     private final DamageMap damageMap;
     private final KillDataHandler killDataHandler;
     private final MessageConfig messageConfig;
-    private final KitpvpConfig config;
 
-    public DamageListener(DamageMap damageMap, KillDataHandler killDataHandler, MessageConfig messageConfig, KitpvpConfig config) {
+    public DamageListener(Server server, DamageMap damageMap, KillDataHandler killDataHandler, MessageConfig messageConfig) {
+        this.server = server;
         this.damageMap = damageMap;
         this.killDataHandler = killDataHandler;
         this.messageConfig = messageConfig;
-        this.config = config;
     }
 
     @EventHandler //honk
     public void onDamage(EntityDamageByEntityEvent event) {
-        if (event.getEntity() instanceof Player damaged && event.getDamager() instanceof Player damager) {
 
-            damageMap.trackDamage(damager,damaged);
-        }
+        damageMap.trackDamage(event.getEntity().getUniqueId(),event.getDamager().getUniqueId());
+
     }
 
     @EventHandler
     public void onKill(PlayerDeathEvent event) {
         Player killed = event.getEntity();
-        Player killer = killed.getKiller();
+        Player killer = event.getEntity().getKiller();
+
+        UUID killedId = event.getEntity().getUniqueId();
 
         if (killer != null) {
-            Set<Player> immutableAssisters = damageMap.getHolder(killed).getAssists(killer);
+            UUID killerId = killer.getUniqueId();
 
             killDataHandler.handleKill(killer,killed,immutableAssisters).whenComplete(Logging.INSTANCE);
 
@@ -53,11 +56,11 @@ public class DamageListener implements Listener {
             MessageController.killType(messageConfig.getKillMessageKiller(),parser).target(killer);
             MessageController.killType(messageConfig.getKillMessageKilled(),parser).target(killed);
 
-            for (Player player : immutableAssisters) {
-                MessageController.killType(messageConfig.getKillMessageAssist(),parser).target(player);
+            for (UUID player : immutableAssisters) {
+                MessageController.killType(messageConfig.getKillMessageAssist(),parser).target(player,server);
             }
         } else {
-            Set<Player> immutableAssisters = damageMap.getHolder(killed).getDamagers();
+            Set<UUID> immutableAssisters = damageMap.getHolder(killedId).getDamagers();
 
             killDataHandler.handleDeath(killed,immutableAssisters).whenComplete(Logging.INSTANCE);
             //messaging
@@ -65,8 +68,8 @@ public class DamageListener implements Listener {
             SinglePlayerParser parser = new SinglePlayerParser(killed);
             MessageController.deathType(messageConfig.getDeathMessageKilled(),parser).target(killed);
 
-            for (Player player : immutableAssisters) {
-                MessageController.deathType(messageConfig.getDeathMessageAssist(),parser).target(player);
+            for (UUID player : immutableAssisters) {
+                MessageController.deathType(messageConfig.getDeathMessageAssist(),parser).target(player,server);
             }
         }
 
@@ -74,7 +77,6 @@ public class DamageListener implements Listener {
 
 
     }
-
 
     @EventHandler
     public void onLeave(PlayerQuitEvent event) {
