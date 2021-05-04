@@ -1,9 +1,10 @@
 package gg.solarmc.kitpvp.messaging;
 
-import org.bukkit.entity.Player;
+import org.bukkit.Server;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class Message {
 
@@ -15,7 +16,7 @@ public class Message {
     private final List<String> strings;
     private final List<Parser> parserList;
 
-    public void target(Player player) {
+    public void target(UUID player, Server server) {
 
         List<String> modified = new ArrayList<>();
 
@@ -30,7 +31,7 @@ public class Message {
         }
 
         for (String parsed : modified) {
-            Prefix.message(player,parsed);
+            Prefix.message(player,parsed,server);
         }
 
     }

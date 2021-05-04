@@ -9,16 +9,13 @@ import gg.solarmc.loader.DataCenter;
 public class KillModule {
 
     private final KitpvpPlugin plugin;
-    private final DamageMap map;
-    private final KillDataHandler killDataHandler;
     private final DamageListener listener;
-
 
     public KillModule(KitpvpPlugin plugin, KitpvpConfig config, MessageConfig messageConfig, DataCenter center) {
         this.plugin = plugin;
-        this.map = new DamageMap(plugin);
-        this.killDataHandler = new KillDataHandler(center, config);
-        this.listener = new DamageListener(map,killDataHandler,messageConfig,config);
+        DamageMap map = new DamageMap(plugin);
+        KillDataHandler killDataHandler = new KillDataHandler(center, config); //TOOD un-local these if we need access to them
+        this.listener = new DamageListener(plugin.getServer(), map, killDataHandler,messageConfig);
     }
 
     public KillModule initializeListeners() {

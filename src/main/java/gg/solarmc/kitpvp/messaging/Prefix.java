@@ -1,23 +1,54 @@
 package gg.solarmc.kitpvp.messaging;
 
+import org.bukkit.Server;
 import org.bukkit.entity.Player;
+
+import java.awt.*;
+import java.util.UUID;
 
 public enum Prefix {
 
-    ACTIONBAR("[ACTIONBAR]", Player::sendActionBar),
-    CHAT("[CHAT]",Player::sendMessage),
-    TITLE("[TITLE]",(s,e) -> {
-        s.sendTitle(e,"",0,10,10);
+    ACTIONBAR("[ACTIONBAR]", (s,e,ser) -> {
+        Player player = ser.getPlayer(s);
+
+        if (player != null) {
+
+            //because we have kyori now i need to figure out how to change this
+        }
     }),
-    SUBTITLE("[SUBTITLE]", (s,e) -> {
-        s.sendTitle("",e,0,10,10);
-    }),
-    BROADCAST("[BROADAST]", (s,e) -> {
-        for (Player player : s.getServer().getOnlinePlayers()) {
+    CHAT("[CHAT]",(s,e,ser) -> {
+        Player player = ser.getPlayer(s);
+
+        if (player != null) {
             player.sendMessage(e);
         }
     }),
-    NONE("",Player::sendMessage);
+    TITLE("[TITLE]",(s,e,ser) -> {
+        Player player = ser.getPlayer(s);
+
+        if (player != null) {
+            player.sendTitle(e,"",0,10,10);
+        }
+    }),
+    SUBTITLE("[SUBTITLE]", (s,e,ser) -> {
+        Player player = ser.getPlayer(s);
+
+        if (player != null) {
+            player.sendTitle(e,"",0,10,10);
+        }
+    }),
+    BROADCAST("[BROADCAST]", (s,e,ser) -> {
+        for (Player player : ser.getOnlinePlayers()) {
+            player.sendMessage(e);
+        }
+    }),
+    NONE("",(s,e,ser) -> {
+        Player player = ser.getPlayer(s);
+
+        if (player != null) {
+            player.sendMessage(e);
+        }
+    });
 
     public String getIdentifier() {
         return identifier;
@@ -43,11 +74,12 @@ public enum Prefix {
         return Prefix.NONE;
     }
 
-    static void message(Player player, String message) {
+    static void message(UUID player, String message, Server server) {
         Prefix prefix = getPrefix(message);
 
         String subMessage = message.substring(prefix.getIdentifier().length());
 
-        prefix.getConsumer().consume(player,subMessage);
+        prefix.getConsumer().consume(player,subMessage,server);
     }
+
 }
