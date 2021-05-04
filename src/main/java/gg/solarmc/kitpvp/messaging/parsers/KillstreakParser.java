@@ -6,6 +6,10 @@ public class KillstreakParser implements Parser {
 
     private final String streakAmount;
 
+    public KillstreakParser(int amount) {
+        this.streakAmount = amount + "";
+    }
+
     public KillstreakParser(String streakAmount) {
         this.streakAmount = streakAmount;
     }
