@@ -15,7 +15,7 @@ public class KillModule {
         this.plugin = plugin;
         DamageMap map = new DamageMap(plugin);
         KillDataHandler killDataHandler = new KillDataHandler(center, config); //TOOD un-local these if we need access to them
-        this.listener = new DamageListener(plugin.getServer(), map, killDataHandler,messageConfig);
+        this.listener = new DamageListener(map, killDataHandler,messageConfig, config);
     }
 
     public KillModule initializeListeners() {

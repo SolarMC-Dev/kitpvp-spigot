@@ -1,14 +1,17 @@
 package gg.solarmc.kitpvp.kill;
 
 import gg.solarmc.kitpvp.KitpvpPlugin;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.*;
 
-public class DamageHolder implements DamageClosable{
+
+public class DamageHolder implements DamageClosable {
+
 
     private final KitpvpPlugin plugin;
-    private final Map<UUID, BukkitTask> damagers;
+    private final Map<Player, BukkitTask> damagers;
 
     public DamageHolder(KitpvpPlugin plugin) {
         this.plugin = plugin;
@@ -19,7 +22,7 @@ public class DamageHolder implements DamageClosable{
      * Adds a player to the damagers and then removes them 10 seconds later. This is probably shitcode in someone's book but tbh at this point i don't care.
      * @param damager the one who damages
      */
-    public void damage(UUID damager) {
+    public void damage(Player damager) {
 
         //if player is not in the map, add the player to the map with a new timer
         //if the player is in the map, cancel the task and add a new timer
@@ -42,7 +45,7 @@ public class DamageHolder implements DamageClosable{
      * Returns all players who damaged this damageholder in the last 10 seconds
      * @return an immutable set containing all the damagers
      */
-    public Set<UUID> getDamagers() {
+    public Set<Player> getDamagers() {
         return Set.copyOf(damagers.keySet());
     }
 
@@ -51,12 +54,13 @@ public class DamageHolder implements DamageClosable{
      * @param killer the one player who should not be included
      * @return an immutable set of players without the killer if present
      */
-    public Set<UUID> getAssists(UUID killer) {
+    public Set<Player> getAssists(Player killer) {
         //streem api bad says big man (replace this later if necessary, i doubt it)
 
-        Set<UUID> pepee = new HashSet<>();
 
-        for (UUID player : damagers.keySet()) {
+        Set<Player> pepee = new HashSet<>();
+
+        for (Player player : damagers.keySet()) {
             if (!player.equals(killer)) {
                 pepee.add(killer);
             }
@@ -66,7 +70,8 @@ public class DamageHolder implements DamageClosable{
     }
 
     @Override
-    public void removeHolder(UUID uuid) {
-        damagers.remove(uuid); //don't cancel the task simply remove the link and let java gc clean it up whenever it finishes
+    public void close(Player player) {
+        this.damagers.remove(player);
+
     }
 }

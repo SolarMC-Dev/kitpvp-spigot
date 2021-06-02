@@ -8,43 +8,33 @@ import java.util.UUID;
 
 public enum Prefix {
 
-    ACTIONBAR("[ACTIONBAR]", (s,e,ser) -> {
-        Player player = ser.getPlayer(s);
-
+    ACTIONBAR("[ACTIONBAR]", (player,e) -> {
         if (player != null) {
 
             //because we have kyori now i need to figure out how to change this
         }
     }),
-    CHAT("[CHAT]",(s,e,ser) -> {
-        Player player = ser.getPlayer(s);
-
+    CHAT("[CHAT]",(player,e) -> {
         if (player != null) {
             player.sendMessage(e);
         }
     }),
-    TITLE("[TITLE]",(s,e,ser) -> {
-        Player player = ser.getPlayer(s);
-
+    TITLE("[TITLE]",(player,e) -> {
         if (player != null) {
             player.sendTitle(e,"",0,10,10);
         }
     }),
-    SUBTITLE("[SUBTITLE]", (s,e,ser) -> {
-        Player player = ser.getPlayer(s);
-
+    SUBTITLE("[SUBTITLE]", (player,e) -> {
         if (player != null) {
             player.sendTitle(e,"",0,10,10);
         }
     }),
-    BROADCAST("[BROADCAST]", (s,e,ser) -> {
-        for (Player player : ser.getOnlinePlayers()) {
+    BROADCAST("[BROADCAST]", (s,e) -> {
+        for (Player player : s.getServer().getOnlinePlayers()) {
             player.sendMessage(e);
         }
     }),
-    NONE("",(s,e,ser) -> {
-        Player player = ser.getPlayer(s);
-
+    NONE("",(player,e) -> {
         if (player != null) {
             player.sendMessage(e);
         }
@@ -74,12 +64,12 @@ public enum Prefix {
         return Prefix.NONE;
     }
 
-    static void message(UUID player, String message, Server server) {
+    static void message(Player player, String message) {
         Prefix prefix = getPrefix(message);
 
         String subMessage = message.substring(prefix.getIdentifier().length());
 
-        prefix.getConsumer().consume(player,subMessage,server);
+        prefix.getConsumer().consume(player, subMessage);
     }
 
 }

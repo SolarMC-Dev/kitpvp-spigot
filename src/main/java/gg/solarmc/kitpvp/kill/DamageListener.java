@@ -1,11 +1,13 @@
 package gg.solarmc.kitpvp.kill;
 
-import gg.solarmc.kitpvp.Util;
+import gg.solarmc.kitpvp.KitpvpConfig;
+import gg.solarmc.kitpvp.kill.levelling.LevelUtil;
 import gg.solarmc.kitpvp.messaging.MessageConfig;
 import gg.solarmc.kitpvp.messaging.MessageController;
-import gg.solarmc.kitpvp.messaging.parsers.PairPlayerParser;
-import gg.solarmc.kitpvp.messaging.parsers.SinglePlayerParser;
-import org.bukkit.Server;
+import gg.solarmc.kitpvp.messaging.parsers.*;
+import gg.solarmc.kitpvp.util.Logging;
+import gg.solarmc.loader.kitpvp.KitPvpKey;
+import gg.solarmc.loader.kitpvp.OnlineKitPvp;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -18,59 +20,94 @@ import java.util.UUID;
 
 public class DamageListener implements Listener {
 
-    private final Server server;
     private final DamageMap damageMap;
     private final KillDataHandler killDataHandler;
     private final MessageConfig messageConfig;
+    private final KitpvpConfig config;
 
-    public DamageListener(Server server, DamageMap damageMap, KillDataHandler killDataHandler, MessageConfig messageConfig) {
-        this.server = server;
+    public DamageListener(DamageMap damageMap, KillDataHandler killDataHandler, MessageConfig messageConfig, KitpvpConfig config) {
         this.damageMap = damageMap;
         this.killDataHandler = killDataHandler;
         this.messageConfig = messageConfig;
+        this.config = config;
     }
 
     @EventHandler //honk
     public void onDamage(EntityDamageByEntityEvent event) {
-
-        damageMap.trackDamage(event.getEntity().getUniqueId(),event.getDamager().getUniqueId());
-
+        if (event.getEntity() instanceof Player damaged && event.getDamager() instanceof Player damager) {
+            damageMap.trackDamage(damager,damaged);
+        }
     }
 
     @EventHandler
     public void onKill(PlayerDeathEvent event) {
         Player killed = event.getEntity();
-        Player killer = event.getEntity().getKiller();
-
-        UUID killedId = event.getEntity().getUniqueId();
+        Player killer = killed.getKiller();
 
         if (killer != null) {
             UUID killerId = killer.getUniqueId();
 
-            Set<UUID> immutableAssisters = damageMap.getHolder(killedId).getAssists(killerId);
+            Set<Player> immutableAssisters = damageMap.getHolder(killed).getAssists(killer);
 
-            killDataHandler.handleKill(killerId,killedId,immutableAssisters).whenComplete(Util.FUTURE_LOG);
+            killDataHandler
+                    .handleKill(killer,killed,immutableAssisters)
+                    .thenAcceptSync(result -> {
 
-            PairPlayerParser parser = new PairPlayerParser(killer,killed);
+                        PairPlayerParser pair = new PairPlayerParser(killer,killed);
+                        SinglePlayerParser single = new SinglePlayerParser(killer);
 
-            MessageController.killType(messageConfig.getKillMessageKiller(),parser).target(killerId,server);
-            MessageController.killType(messageConfig.getKillMessageKilled(),parser).target(killedId,server);
+                        //basic kill/death messages
+                        MessageController.killType(messageConfig.getKillMessageKiller(),pair).target(killer);
+                        MessageController.killType(messageConfig.getKillMessageKilled(),pair).target(killed);
 
-            for (UUID player : immutableAssisters) {
-                MessageController.killType(messageConfig.getKillMessageAssist(),parser).target(player,server);
-            }
+                        //levelup for killer
+                        if (result.isLevelUp()) {
+                            OnlineKitPvp killerData = killer.getSolarPlayer().getData(KitPvpKey.INSTANCE);
+
+                            LevelUpParser level = new LevelUpParser(LevelUtil.getLevel(killerData.currentExperience()),killerData.currentAssists());
+
+                            MessageController.levelType(messageConfig.getLevelUpActions(),single,level).target(killer);
+                        }
+
+                        KillstreakParser killerStreak = new KillstreakParser(result.getKillerKillstreak());
+                        KillstreakParser killedStreak = new KillstreakParser(result.getKilledKillstreak());
+
+                        //killstreak messages
+                        if (result.isEndedKillstreak()) {
+                            MessageController.killstreakEndType(messageConfig.getKillstreakEndedMessage(),pair,killedStreak).target(killer);
+                        }
+
+                        if (result.getKillerKillstreak() % 10 == 0) {
+                            MessageController.killstreakType(messageConfig.getKillstreakReachedMessage(),single,killerStreak).target(killer);
+                        }
+
+                        MoneyParser moneyParser = new MoneyParser(result.getRewardAmount());
+                        MessageController.moneyType(messageConfig.getReceiveMoneyMessage(),moneyParser).target(killer);
+
+                        //assister messages
+                        for (Player player : immutableAssisters) {
+                            MoneyParser assistParser = new MoneyParser(result.getAssistAmount());
+                            MessageController.killType(messageConfig.getKillMessageAssist(),pair).target(player);
+                            MessageController.moneyType(messageConfig.getReceiveMoneyMessage(),assistParser).target(player);
+
+                        }
+                    })
+                    .whenComplete(Logging.INSTANCE);
+
         } else {
-            Set<UUID> immutableAssisters = damageMap.getHolder(killedId).getDamagers();
+            Set<Player> immutableAssisters = damageMap.getHolder(killed).getDamagers();
 
-            killDataHandler.handleDeath(killedId,immutableAssisters).whenComplete(Util.FUTURE_LOG);
+            killDataHandler
+                    .handleDeath(killed,immutableAssisters)
+                    .thenRunSync(() -> {
+                        SinglePlayerParser parser = new SinglePlayerParser(killed);
+                        MessageController.deathType(messageConfig.getDeathMessageKilled(),parser).target(killed);
 
-            SinglePlayerParser parser = new SinglePlayerParser(killed);
-
-            MessageController.deathType(messageConfig.getDeathMessageKilled(),parser).target(killedId,server);
-
-            for (UUID player : immutableAssisters) {
-                MessageController.deathType(messageConfig.getDeathMessageAssist(),parser).target(player,server);
-            }
+                        for (Player player : immutableAssisters) {
+                            MessageController.deathType(messageConfig.getDeathMessageAssist(),parser).target(player);
+                        }
+                    })
+                    .whenComplete(Logging.INSTANCE);
         }
 
 
@@ -78,9 +115,10 @@ public class DamageListener implements Listener {
 
     }
 
+
     @EventHandler
     public void onLeave(PlayerQuitEvent event) {
-        damageMap.removeHolder(event.getPlayer().getUniqueId());
+        damageMap.close(event.getPlayer());
     }
 
 }

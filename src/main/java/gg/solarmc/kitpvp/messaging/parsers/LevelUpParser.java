@@ -4,6 +4,11 @@ import gg.solarmc.kitpvp.messaging.Parser;
 
 public class LevelUpParser implements Parser {
 
+    public LevelUpParser(double newLevel, int totalXP) {
+        this.newLevel = newLevel + "";
+        this.totalXP = totalXP + "";
+    }
+
     public LevelUpParser(String newLevel, String totalXP) {
         this.newLevel = newLevel;
         this.totalXP = totalXP;
