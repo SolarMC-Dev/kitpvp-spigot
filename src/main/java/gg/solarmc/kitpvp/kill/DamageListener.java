@@ -16,6 +16,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.Set;
+import java.util.UUID;
 
 public class DamageListener implements Listener {
 
@@ -44,6 +45,8 @@ public class DamageListener implements Listener {
         Player killer = killed.getKiller();
 
         if (killer != null) {
+            UUID killerId = killer.getUniqueId();
+
             Set<Player> immutableAssisters = damageMap.getHolder(killed).getAssists(killer);
 
             killDataHandler

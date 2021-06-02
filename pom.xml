@@ -20,10 +20,6 @@
 
     <repositories>
         <repository>
-            <id>repsy</id>
-            <url>https://repo.repsy.io/mvn/elytraforce/default</url>
-        </repository>
-        <repository>
             <id>solar-rekt</id>
             <url>https://mvn-repo.platinum-mc.com/releases</url>
         </repository>

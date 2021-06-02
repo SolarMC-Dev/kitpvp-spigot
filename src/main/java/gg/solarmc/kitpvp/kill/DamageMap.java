@@ -1,6 +1,7 @@
 package gg.solarmc.kitpvp.kill;
 
 import gg.solarmc.kitpvp.KitpvpPlugin;
+import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,15 +13,15 @@ import java.util.UUID;
 
 public class DamageMap implements DamageClosable {
 
-    private Map<UUID, DamageHolder> handlerMap;
-    private KitpvpPlugin plugin;
+    private final Map<Player, DamageHolder> handlerMap;
+    private final KitpvpPlugin plugin;
 
     public DamageMap(KitpvpPlugin plugin) {
         this.plugin = plugin;
         this.handlerMap = new HashMap<>();
     }
 
-    public void trackDamage(UUID damager, UUID damaged) {
+    public void trackDamage(Player damager, Player damaged) {
         this.getHolder(damaged).damage(damager);
     }
 
@@ -30,16 +31,14 @@ public class DamageMap implements DamageClosable {
      *
      * @param wiped the person who is to have their damageholder wiped
      */
-    public void wipeHolder(UUID wiped) {
+    public void wipeHolder(Player wiped) {
         handlerMap.put(wiped,new DamageHolder(plugin));
     }
 
-    public void removeHolder(UUID wiped) {
+    public void removeHolder(Player wiped) {
         handlerMap.remove(wiped);
 
-        handlerMap.values().forEach(holder -> {
-            holder.removeHolder(wiped);
-        });
+        handlerMap.values().forEach(holder -> holder.close(wiped));
     }
 
     /**
@@ -47,7 +46,7 @@ public class DamageMap implements DamageClosable {
      * @param key the player
      * @return a new dataholder
      */
-    public DamageHolder getHolder(UUID key) {
+    public DamageHolder getHolder(Player key) {
         return handlerMap.computeIfAbsent(key, (ignored) -> new DamageHolder(plugin));
     }
 
