@@ -21,7 +21,7 @@
     <repositories>
         <repository>
             <id>solar-rekt</id>
-            <url>https://mvn-repo.platinum-mc.com/releases</url>
+            <url>https://mvn-repo.solarmc.gg/releases</url>
         </repository>
         <repository>
             <id>placeholderapi</id>
