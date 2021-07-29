@@ -19,10 +19,14 @@
 
 package gg.solarmc.kitpvp;
 
+import gg.solarmc.kitpvp.listeners.KillListener;
 import gg.solarmc.loader.DataCenter;
 import org.bukkit.Server;
+import org.bukkit.command.CommandMap;
 import org.bukkit.plugin.LaunchablePlugin;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.TempDir;
@@ -32,18 +36,44 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class KitpvpPluginTest {
 
-    @Test
-    public void onLaunch(@Mock Plugin plugin, @Mock Server server,
-                         @Mock DataCenter dataCenter, @TempDir Path folder) {
+    private final Plugin plugin;
+    private final Server server;
+    private LaunchablePlugin kitpvp;
+
+    @TempDir
+    public Path folder;
+
+    public KitpvpPluginTest(@Mock Plugin plugin, @Mock Server server) {
+        this.plugin = plugin;
+        this.server = server;
+    }
+
+    @BeforeEach
+    public void setKitpvp(@Mock DataCenter dataCenter) {
         when(plugin.getServer()).thenReturn(server);
         when(server.getDataCenter()).thenReturn(dataCenter);
-        @SuppressWarnings("resource")
-        LaunchablePlugin kitpvp = new KitpvpPlugin();
+        kitpvp = new KitpvpPlugin();
+    }
+
+    @Test
+    public void onLaunch() {
         assertDoesNotThrow(() -> kitpvp.onLaunch(plugin, folder));
+    }
+
+    @Test
+    public void onEnable(@Mock PluginManager pluginManager, @Mock CommandMap commandMap) {
+        when(server.getPluginManager()).thenReturn(pluginManager);
+        when(server.getCommandMap()).thenReturn(commandMap);
+        kitpvp.onLaunch(plugin, folder);
+        kitpvp.onEnable();
+        verify(pluginManager).registerEvents(isA(KillListener.class), eq(plugin));
     }
 }

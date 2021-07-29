@@ -23,7 +23,6 @@ import gg.solarmc.kitpvp.commands.CommandRegistration;
 import gg.solarmc.kitpvp.config.ConfigCenter;
 import gg.solarmc.kitpvp.listeners.ListenerRegistration;
 import jakarta.inject.Inject;
-import org.bukkit.plugin.Plugin;
 
 import java.util.List;
 
