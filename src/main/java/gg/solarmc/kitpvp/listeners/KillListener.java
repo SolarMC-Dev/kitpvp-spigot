@@ -25,6 +25,7 @@ import gg.solarmc.kitpvp.HasLifecycle;
 import gg.solarmc.kitpvp.config.ConfigCenter;
 import gg.solarmc.kitpvp.handler.KillHandler;
 import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -34,6 +35,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 
 import java.time.Duration;
 
+@Singleton
 public class KillListener implements Listener, HasLifecycle {
 
     private final ConfigCenter configCenter;
@@ -47,7 +49,7 @@ public class KillListener implements Listener, HasLifecycle {
         this.killHandler = killHandler;
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onDamage(EntityDamageByEntityEvent damageEvent) {
         if (damageEvent.getEntity() instanceof Player victim
                 && damageEvent.getDamager() instanceof Player attacker) {
@@ -57,7 +59,7 @@ public class KillListener implements Listener, HasLifecycle {
         }
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onDeath(PlayerDeathEvent deathEvent) {
         Player dead = deathEvent.getEntity();;
         DamageTracker tracker = damageTrackers.asMap().remove(dead);

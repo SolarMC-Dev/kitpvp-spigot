@@ -21,6 +21,7 @@ package gg.solarmc.kitpvp.config;
 
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import jakarta.inject.Singleton;
 import space.arim.dazzleconf.ConfigurationOptions;
 import space.arim.dazzleconf.error.InvalidConfigException;
 import space.arim.dazzleconf.ext.snakeyaml.CommentMode;
@@ -33,6 +34,7 @@ import java.io.UncheckedIOException;
 import java.nio.file.Path;
 import java.util.Objects;
 
+@Singleton
 public final class MainConfigCenter implements ConfigCenter {
 
     private final Path folder;
@@ -57,7 +59,7 @@ public final class MainConfigCenter implements ConfigCenter {
                 SnakeYamlConfigurationFactory.create(Config.class, options,
                         new SnakeYamlOptions.Builder().commentMode(CommentMode.fullComments()).build()));
         try {
-            config = configHelper.reloadConfigData();
+            config = Objects.requireNonNull(configHelper.reloadConfigData(), "Null config");
         } catch (IOException ex) {
             throw new UncheckedIOException(ex);
         } catch (InvalidConfigException ex) {

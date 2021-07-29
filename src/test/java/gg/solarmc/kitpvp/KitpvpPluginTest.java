@@ -33,9 +33,11 @@ import org.junit.jupiter.api.io.TempDir;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.verify;
@@ -75,5 +77,6 @@ public class KitpvpPluginTest {
         kitpvp.onLaunch(plugin, folder);
         kitpvp.onEnable();
         verify(pluginManager).registerEvents(isA(KillListener.class), eq(plugin));
+        assertTrue(Files.exists(folder.resolve("config.yml")));
     }
 }

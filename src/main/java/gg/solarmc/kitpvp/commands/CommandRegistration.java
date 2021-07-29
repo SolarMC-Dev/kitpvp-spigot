@@ -2,12 +2,14 @@ package gg.solarmc.kitpvp.commands;
 
 import gg.solarmc.kitpvp.HasLifecycle;
 import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
 import org.bukkit.plugin.Plugin;
 
 import java.util.List;
 
+@Singleton
 public final class CommandRegistration implements HasLifecycle {
 
     private final Plugin plugin;

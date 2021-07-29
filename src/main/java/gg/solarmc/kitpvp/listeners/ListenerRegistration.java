@@ -21,12 +21,14 @@ package gg.solarmc.kitpvp.listeners;
 
 import gg.solarmc.kitpvp.HasLifecycle;
 import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 
 import java.util.List;
 
+@Singleton
 public final class ListenerRegistration implements HasLifecycle {
 
     private final Plugin plugin;
