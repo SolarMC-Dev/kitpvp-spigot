@@ -58,6 +58,7 @@ public class MainConfigCenterTest {
     public void reloadDefaultConfig() {
         configCenter.reload();
         assertNotNull(configCenter.config());
+        assertDoesNotThrow(configCenter::reload);
     }
 
 }

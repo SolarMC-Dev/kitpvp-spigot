@@ -61,7 +61,7 @@ public interface PossibleSound {
 
         private FlexibleType getMapValue(FlexibleType exceptionHelper,
                                          Map<String, FlexibleType> map, String attribute) throws BadValueException {
-            FlexibleType source = map.get("source");
+            FlexibleType source = map.get(attribute);
             if (source == null) {
                 throw exceptionHelper.badValueExceptionBuilder()
                         .message("Sound " + attribute + " not specified").build();
