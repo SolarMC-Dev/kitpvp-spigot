@@ -173,10 +173,13 @@ public class KillHandler {
         }
 
         private void previousKillstreakLost(int victimLostKillstreak) {
-            addCallback(() -> {
+            if (victimLostKillstreak == 0) {
+                return;
+            }
+            addCallback(() -> {   
                 ComponentLike lostKillstreakMessage = violence().lostKillstreakMessage()
                         .replaceText("%PREVIOUS_KILLSTREAK%", Integer.toString(victimLostKillstreak));
-                sendMessageIfNotEmpty(killer(), lostKillstreakMessage);
+                sendMessageIfNotEmpty(victim(), lostKillstreakMessage);
             });
         }
 
