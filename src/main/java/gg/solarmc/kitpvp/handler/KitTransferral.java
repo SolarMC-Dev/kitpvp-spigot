@@ -54,7 +54,11 @@ public class KitTransferral {
         PlayerInventory inventory = source.getInventory();;
         Set<ItemInSlot> contents = new HashSet<>(INVENTORY_SIZE);
         for (int slot = 0; slot < INVENTORY_SIZE; slot++) {
-            contents.add(new ItemInSlot(slot, BukkitKitItem.create(inventory.getItem(slot))));
+            ItemStack item = inventory.getItem(slot);
+            if (item == null) {
+                continue;
+            }
+            contents.add(new ItemInSlot(slot, BukkitKitItem.create(item)));
         }
         return contents;
     }
