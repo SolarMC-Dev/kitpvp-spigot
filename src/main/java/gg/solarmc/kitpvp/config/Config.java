@@ -104,6 +104,16 @@ public interface Config {
         @ConfDefault.DefaultString("Placed a bounty of %BOUNTY_ADDED% on %BOUNTY_TARGET%, for a total bounty of %BOUNTY_NEW%.")
         ComponentText placedBounty();
 
+        @ConfKey("placed-bounty-broadcast")
+        @ConfComments({"Message when a player has placed or updated a bounty on another. Variables:",
+                "%BOUNTY_ADDED% - the amount added",
+                "%BOUNTY_NEW% - the new bounty on the target",
+                "%BOUNTY_TARGET% - whom the bounty was placed on",
+                "%BOUNTY_MALEFACTOR% - the player who placed the bounty ",
+                ""})
+        @ConfDefault.DefaultString("%BOUNTY_MALEFACTOR% placed a bounty of %BOUNTY_ADDED% on %BOUNTY_TARGET%, for a total bounty of %BOUNTY_NEW%.")
+        ComponentText placedBountyBroadcast();
+
         @ConfKey("claimed-bounty")
         @ConfComments({"Message sent to the killer when a bounty is claimed. ",
                 "Set to empty to disable. Variables:",

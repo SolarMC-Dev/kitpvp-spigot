@@ -7,6 +7,7 @@ module gg.solarmc.kitpvp {
     requires gg.solarmc.loader.credits;
     requires gg.solarmc.loader.kitpvp;
     requires gg.solarmc.paper.itemserializer;
+    requires gg.solarmc.streamer;
     requires jakarta.inject;
     requires me.clip.placeholderapi;
     requires org.bukkit;

@@ -17,10 +17,14 @@
  * and navigate to version 3 of the GNU Affero General Public License.
  */
 
-package gg.solarmc.kitpvp.config;
+package gg.solarmc.kitpvp;
 
-public interface ConfigCenter {
+import org.junit.jupiter.api.Test;
 
-    Config config();
+public class LifecycleTest {
 
+    @Test
+    public void allDeclared() {
+        new InjectableConstructor(Lifecycle.class).verifyParametersContainSubclassesOf(HasLifecycle.class);
+    }
 }

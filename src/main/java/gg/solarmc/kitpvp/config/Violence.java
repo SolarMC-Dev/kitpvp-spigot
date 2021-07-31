@@ -27,7 +27,6 @@ import space.arim.dazzleconf.annote.ConfKey;
 import space.arim.dazzleconf.annote.SubSection;
 
 import java.math.BigDecimal;
-import java.util.Map;
 import java.util.Optional;
 
 public interface Violence {

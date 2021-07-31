@@ -17,26 +17,16 @@
  * and navigate to version 3 of the GNU Affero General Public License.
  */
 
-package gg.solarmc.kitpvp.commands;
+package gg.solarmc.kitpvp.listeners;
 
-import gg.solarmc.kitpvp.config.ConfigCenter;
-import jakarta.inject.Inject;
-import org.bukkit.command.CommandSender;
+import gg.solarmc.kitpvp.InjectableConstructor;
+import org.bukkit.event.Listener;
+import org.junit.jupiter.api.Test;
 
-public class KitsGuiCommand extends BaseCommand {
+public class ListenerRegistrationTest {
 
-    @Inject
-    public KitsGuiCommand(ConfigCenter configCenter) {
-        super("kitgui", configCenter);
-    }
-
-    @Override
-    public void permission(StringBuilder builder) {
-        builder.append("kitgui");
-    }
-
-    @Override
-    public void execute(CommandSender sender, CommandIterator command) {
-        throw new UnsupportedOperationException("Not implemented");
+    @Test
+    public void allDeclared() {
+        new InjectableConstructor(ListenerRegistration.class).verifyParametersContainSubclassesOf(Listener.class);
     }
 }

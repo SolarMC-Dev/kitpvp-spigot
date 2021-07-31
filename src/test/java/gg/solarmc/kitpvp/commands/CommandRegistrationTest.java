@@ -17,10 +17,15 @@
  * and navigate to version 3 of the GNU Affero General Public License.
  */
 
-package gg.solarmc.kitpvp.config;
+package gg.solarmc.kitpvp.commands;
 
-public interface ConfigCenter {
+import gg.solarmc.kitpvp.InjectableConstructor;
+import org.junit.jupiter.api.Test;
 
-    Config config();
+public class CommandRegistrationTest {
 
+    @Test
+    public void allDeclared() {
+       new InjectableConstructor(CommandRegistration.class).verifyParametersContainSubclassesOf(BaseCommand.class);
+    }
 }

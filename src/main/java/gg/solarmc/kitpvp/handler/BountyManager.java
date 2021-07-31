@@ -56,16 +56,16 @@ public class BountyManager {
      * Attempts to place a bounty
      *
      * @param target the target of the bounty
-     * @param seeker the one placing the bounty
+     * @param malefactor the one placing the bounty
      * @param amount the bounty amount
      * @return a future of the placement
      */
-    public CentralisedFuture<?> placeBounty(Player target, Player seeker, int amount) {
+    public CentralisedFuture<?> placeBounty(Player target, Player malefactor, int amount) {
 
         record BountyPlacement(boolean success, BigDecimal availableFunds, int newBounty) { }
 
         return dataCenter.transact((tx) -> {
-            WithdrawResult withdrawResult = seeker.getSolarPlayer().getData(CreditsKey.INSTANCE)
+            WithdrawResult withdrawResult = malefactor.getSolarPlayer().getData(CreditsKey.INSTANCE)
                     .withdrawBalance(tx, BigDecimal.valueOf(amount));
             if (!withdrawResult.isSuccessful()) {
                 return new BountyPlacement(false, withdrawResult.newBalance(), 0 /* doesn't matter */);
@@ -74,16 +74,21 @@ public class BountyManager {
             return new BountyPlacement(true, withdrawResult.newBalance(), newBounty);
         }).thenAcceptSync((bountyPlacement) -> {
             if (!bountyPlacement.success()) {
-                seeker.sendMessage(bounties().notEnoughFunds()
+                malefactor.sendMessage(bounties().notEnoughFunds()
                         .replaceText("%BOUNTY_ADDED%", Integer.toString(amount))
                         .replaceText("%BOUNTY_TARGET%", target.getName())
                         .replaceText("%AVAILABLE_FUNDS%", bountyPlacement.availableFunds().toPlainString()));
                 return;
             }
-            seeker.sendMessage(bounties().placedBounty()
+            malefactor.sendMessage(bounties().placedBounty()
                     .replaceText("%BOUNTY_ADDED%", Integer.toString(amount))
                     .replaceText("%BOUNTY_TARGET%", target.getName())
                     .replaceText("%BOUNTY_NEW%", Integer.toString(bountyPlacement.newBounty())));
+            malefactor.getServer().sendMessage(bounties().placedBountyBroadcast()
+                    .replaceText("%BOUNTY_ADDED%", Integer.toString(amount))
+                    .replaceText("%BOUNTY_TARGET%", target.getName())
+                    .replaceText("%BOUNTY_NEW%", Integer.toString(bountyPlacement.newBounty()))
+                    .replaceText("%BOUNTY_MALEFACTOR%", malefactor.getName()));
         });
     }
 

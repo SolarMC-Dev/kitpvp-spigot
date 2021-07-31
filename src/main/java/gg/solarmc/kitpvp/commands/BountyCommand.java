@@ -91,11 +91,11 @@ public class BountyCommand extends BaseCommand {
                 sender.sendMessage(commands().addNotANumber().replaceText("%ARGUMENT%", amountArgument));
                 return;
             }
-            if (!(sender instanceof Player seeker)) {
+            if (!(sender instanceof Player malefactor)) {
                 sender.sendMessage(Component.text("You are not a player"));
                 return;
             }
-            futurePoster.postFuture(bountyManager.placeBounty(target, seeker, amount));
+            futurePoster.postFuture(bountyManager.placeBounty(target, malefactor, amount));
         }
     }
 

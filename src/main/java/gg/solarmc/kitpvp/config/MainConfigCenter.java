@@ -19,6 +19,7 @@
 
 package gg.solarmc.kitpvp.config;
 
+import gg.solarmc.kitpvp.HasLifecycle;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.inject.Singleton;
@@ -35,7 +36,7 @@ import java.nio.file.Path;
 import java.util.Objects;
 
 @Singleton
-public final class MainConfigCenter implements ConfigCenter {
+public final class MainConfigCenter implements ConfigCenter, HasLifecycle {
 
     private final Path folder;
     private final ConfigurationOptions options;

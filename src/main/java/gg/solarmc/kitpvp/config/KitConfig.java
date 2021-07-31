@@ -54,4 +54,16 @@ public interface KitConfig {
     @ConfDefault.DefaultString("&7You have chosen kit &e%KIT%&7. Prepare yourself.")
     ComponentText choseKit();
 
+    @ConfKey("kit-add-mode")
+    @ConfComments({
+            "ADD_OR_DROP – the kit is added to the player's inventory and extra items are dropped.",
+            "COPY_AND_SET - the kit is copied to the player's inventory and replaces existing items."})
+    @ConfDefault.DefaultString("ADD_OR_DROP")
+    KitAddMode kitAddMode();
+
+    enum KitAddMode {
+        ADD_OR_DROP,
+        COPY_AND_SET
+    }
+
 }

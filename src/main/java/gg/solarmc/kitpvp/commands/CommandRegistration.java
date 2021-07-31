@@ -21,8 +21,10 @@ public final class CommandRegistration implements HasLifecycle {
     }
 
     @Inject
-    public CommandRegistration(Plugin plugin, BountyCommand bountyCommand, AdminCommand reloadCommand) {
-        this(plugin, List.of(bountyCommand, reloadCommand));
+    public CommandRegistration(Plugin plugin,
+                               BountyCommand bountyCommand, AdminCommand reloadCommand, SelectKitCommand selectKitCommand) {
+        this(plugin, List.of(
+                bountyCommand, reloadCommand, selectKitCommand));
     }
 
     @Override

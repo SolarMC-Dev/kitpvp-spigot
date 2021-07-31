@@ -20,15 +20,20 @@
 package gg.solarmc.kitpvp.handler;
 
 import gg.solarmc.kitpvp.config.ConfigCenter;
+import gg.solarmc.kitpvp.config.KitConfig;
 import gg.solarmc.loader.kitpvp.ItemInSlot;
 import gg.solarmc.loader.kitpvp.Kit;
 import gg.solarmc.paper.itemserializer.BukkitKitItem;
+import gg.solarmc.streamer.Streamer;
 import jakarta.inject.Inject;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
+import java.util.Comparator;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class KitTransferral {
@@ -40,18 +45,37 @@ public class KitTransferral {
         this.config = config;
     }
 
+    private KitConfig kitConfig() {
+        return config.config().kitConfig();
+    }
+
     public void addKitToInventory(Kit kit, Player target) {
         PlayerInventory inventory = target.getInventory();
-        for (ItemInSlot itemInSlot : kit.getContents()) {
-            inventory.setItem(itemInSlot.slot(), itemInSlot.item().getItem(ItemStack.class));
+        switch (kitConfig().kitAddMode()) {
+        case ADD_OR_DROP -> {
+            ItemStack[] items = Streamer.stream(kit.getContents())
+                    .sorted(Comparator.comparing(ItemInSlot::slot))
+                    .map((itemInSlot) -> itemInSlot.item().getItem(ItemStack.class))
+                    .toArray(ItemStack[]::new);
+            Map<Integer, ItemStack> unadded = inventory.addItem(items);
+            Location dropAt = target.getLocation();
+            unadded.values().forEach((item) -> {
+                dropAt.getWorld().dropItem(dropAt, item);
+            });
         }
-        target.sendMessage(config.config().kitConfig().choseKit().replaceText("%KIT%", kit.getName()));
+        case COPY_AND_SET -> {
+            for (ItemInSlot itemInSlot : kit.getContents()) {
+                inventory.setItem(itemInSlot.slot(), itemInSlot.item().getItem(ItemStack.class));
+            }
+        }
+        }
+        target.sendMessage(kitConfig().choseKit().replaceText("%KIT%", kit.getName()));
     }
 
     private static final int INVENTORY_SIZE = 40;
 
     public Set<ItemInSlot> obtainItemsFromInventory(Player source) {
-        PlayerInventory inventory = source.getInventory();;
+        PlayerInventory inventory = source.getInventory();
         Set<ItemInSlot> contents = new HashSet<>(INVENTORY_SIZE);
         for (int slot = 0; slot < INVENTORY_SIZE; slot++) {
             ItemStack item = inventory.getItem(slot);
