@@ -19,6 +19,7 @@
 
 package gg.solarmc.kitpvp.commands;
 
+import gg.solarmc.command.CommandIterator;
 import gg.solarmc.kitpvp.config.ConfigCenter;
 import gg.solarmc.kitpvp.config.KitConfig;
 import gg.solarmc.kitpvp.handler.KitTransferral;

@@ -1,5 +1,6 @@
 package gg.solarmc.kitpvp.commands;
 
+import gg.solarmc.command.CommandIterator;
 import gg.solarmc.kitpvp.config.Config;
 import gg.solarmc.kitpvp.config.ConfigCenter;
 import gg.solarmc.kitpvp.handler.BountyManager;

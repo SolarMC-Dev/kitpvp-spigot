@@ -114,6 +114,11 @@
             <version>3.0.3</version>
         </dependency>
         <dependency>
+            <groupId>gg.solarmc</groupId>
+            <artifactId>commanditerator</artifactId>
+            <version>0.1.0</version>
+        </dependency>
+        <dependency>
             <groupId>gg.solarmc.streamer</groupId>
             <artifactId>streamer</artifactId>
             <version>0.1.2</version>

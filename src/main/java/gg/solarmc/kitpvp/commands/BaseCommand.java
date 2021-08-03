@@ -1,5 +1,7 @@
 package gg.solarmc.kitpvp.commands;
 
+import gg.solarmc.command.ArrayCommandIterator;
+import gg.solarmc.command.CommandIterator;
 import gg.solarmc.kitpvp.config.Config;
 import gg.solarmc.kitpvp.config.ConfigCenter;
 import org.bukkit.command.CommandSender;
@@ -36,7 +38,7 @@ public abstract class BaseCommand extends BukkitCommandSkeleton {
             sender.sendMessage(config().messages().noPermission());
             return;
         }
-        execute(sender, new CommandIterator(args));
+        execute(sender, new ArrayCommandIterator(args));
     }
 
     @Override

@@ -3,6 +3,7 @@ import org.bukkit.plugin.LaunchablePlugin;
 
 module gg.solarmc.kitpvp {
     requires com.github.benmanes.caffeine;
+    requires gg.solarmc.command;
     requires gg.solarmc.loader;
     requires gg.solarmc.loader.credits;
     requires gg.solarmc.loader.kitpvp;
