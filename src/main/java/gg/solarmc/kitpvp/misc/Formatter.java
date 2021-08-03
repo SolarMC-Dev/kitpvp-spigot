@@ -45,7 +45,7 @@ public class Formatter {
         this(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.LONG, FormatStyle.MEDIUM).withLocale(Locale.ENGLISH));
     }
 
-    public String formatAbsoluteDate(Instant date) {
+    public CharSequence formatAbsoluteDate(Instant date) {
         return timeFormatter.format(date.atZone(ZoneOffset.UTC));
     }
 
@@ -53,7 +53,7 @@ public class Formatter {
         return formatTimespan(kit.getCooldown());
     }
 
-    public String formatRemainingCooldown(Kit kit, Duration remainingCooldown) {
+    public CharSequence formatRemainingCooldown(Kit kit, Duration remainingCooldown) {
         // Prevent the 23 hours 59 minutes problem
         Duration cooldown = kit.getCooldown();
         if (kit.getCooldown().minus(remainingCooldown).compareTo(Duration.ofMinutes(1L)) < 0) {
