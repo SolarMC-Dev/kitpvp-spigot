@@ -11,6 +11,7 @@ module gg.solarmc.kitpvp {
     requires gg.solarmc.streamer;
     requires jakarta.inject;
     requires me.clip.placeholderapi;
+    requires net.milkbowl.vault;
     requires org.bukkit;
     requires org.slf4j;
     requires space.arim.api.env.bukkit;
@@ -23,6 +24,7 @@ module gg.solarmc.kitpvp {
     exports gg.solarmc.kitpvp.commands to space.arim.injector;
     exports gg.solarmc.kitpvp.config to space.arim.injector;
     exports gg.solarmc.kitpvp.handler to space.arim.injector;
+    exports gg.solarmc.kitpvp.handler.vault to space.arim.injector;
     exports gg.solarmc.kitpvp.listeners to space.arim.injector;
     exports gg.solarmc.kitpvp.misc to space.arim.injector;
     exports gg.solarmc.kitpvp.provider;

@@ -32,6 +32,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.TempDir;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import space.arim.omnibus.DefaultOmnibus;
+import space.arim.omnibus.Omnibus;
+import space.arim.omnibus.util.concurrent.FactoryOfTheFuture;
+import space.arim.omnibus.util.concurrent.impl.IndifferentFactoryOfTheFuture;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -62,6 +66,9 @@ public class KitpvpPluginTest {
     public void setKitpvp(@Mock DataCenter dataCenter) {
         when(plugin.getServer()).thenReturn(server);
         when(server.getDataCenter()).thenReturn(dataCenter);
+        Omnibus omnibus = new DefaultOmnibus();
+        omnibus.getRegistry().register(FactoryOfTheFuture.class, (byte) 0, new IndifferentFactoryOfTheFuture(), "Futures factory");
+        when(server.getOmnibus()).thenReturn(omnibus);
         kitpvp = new KitpvpPlugin();
     }
 

@@ -23,8 +23,6 @@ import gg.solarmc.kitpvp.config.Config;
 import gg.solarmc.kitpvp.config.ConfigCenter;
 import gg.solarmc.loader.DataCenter;
 import gg.solarmc.loader.Transaction;
-import gg.solarmc.loader.credits.CreditsKey;
-import gg.solarmc.loader.credits.WithdrawResult;
 import gg.solarmc.loader.kitpvp.KitPvpKey;
 import jakarta.inject.Inject;
 import net.kyori.adventure.text.Component;
@@ -37,11 +35,13 @@ public class BountyManager {
 
     private final DataCenter dataCenter;
     private final ConfigCenter configCenter;
+    private final BankAccess bankAccess;
 
     @Inject
-    public BountyManager(DataCenter dataCenter, ConfigCenter configCenter) {
+    public BountyManager(DataCenter dataCenter, ConfigCenter configCenter, BankAccess bankAccess) {
         this.dataCenter = dataCenter;
         this.configCenter = configCenter;
+        this.bankAccess = bankAccess;
     }
 
     private Config config() {
@@ -65,8 +65,7 @@ public class BountyManager {
         record BountyPlacement(boolean success, BigDecimal availableFunds, int newBounty) { }
 
         return dataCenter.transact((tx) -> {
-            WithdrawResult withdrawResult = malefactor.getSolarPlayer().getData(CreditsKey.INSTANCE)
-                    .withdrawBalance(tx, BigDecimal.valueOf(amount));
+            BankAccess.WithdrawResult withdrawResult = bankAccess.withdrawBalance(tx, malefactor, BigDecimal.valueOf(amount));
             if (!withdrawResult.isSuccessful()) {
                 return new BountyPlacement(false, withdrawResult.newBalance(), 0 /* doesn't matter */);
             }
@@ -115,13 +114,12 @@ public class BountyManager {
 
         BigDecimal totalBounty = explicitBounty.add(implicitBounty);
         if (!totalBounty.equals(BigDecimal.ZERO)) {
-            killer.getSolarPlayer().getData(CreditsKey.INSTANCE).depositBalance(tx, totalBounty);
+            bankAccess.depositBalance(tx, killer, totalBounty);
             kill.bountyReward(totalBounty, explicitBounty, implicitBounty);
 
             if (!implicitBounty.equals(BigDecimal.ZERO) &&
                     bounties().implicitBounties().victimReceivesImplicitBounty()) {
-                victim.getSolarPlayer().getData(CreditsKey.INSTANCE)
-                        .depositBalance(tx, implicitBounty);
+                bankAccess.depositBalance(tx, victim, implicitBounty);
                 kill.implicitBountyReward(implicitBounty, victimLostKillstreak);
             }
         }

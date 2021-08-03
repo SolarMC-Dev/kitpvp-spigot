@@ -25,6 +25,8 @@ import gg.solarmc.kitpvp.config.MainConfigCenter;
 import gg.solarmc.kitpvp.config.PossibleSound;
 import gg.solarmc.kitpvp.config.RangedLookupTableBigDecimal;
 import gg.solarmc.kitpvp.config.RangedLookupTableComponentText;
+import gg.solarmc.kitpvp.handler.BankAccess;
+import gg.solarmc.kitpvp.handler.vault.LazyVaultBankAccess;
 import gg.solarmc.kitpvp.misc.FuturePoster;
 import gg.solarmc.kitpvp.misc.LoggingFuturePoster;
 import gg.solarmc.loader.DataCenter;
@@ -34,6 +36,7 @@ import space.arim.api.jsonchat.adventure.ChatMessageComponentSerializer;
 import space.arim.api.util.dazzleconf.ChatMessageSerializer;
 import space.arim.api.util.dazzleconf.ComponentTextSerializer;
 import space.arim.dazzleconf.ConfigurationOptions;
+import space.arim.omnibus.util.concurrent.FactoryOfTheFuture;
 
 public class MainBindModule {
 
@@ -47,6 +50,10 @@ public class MainBindModule {
 
     public ConfigCenter configCenter(MainConfigCenter configCenter) {
         return configCenter;
+    }
+
+    public FactoryOfTheFuture futuresFactory(Server server) {
+        return server.getOmnibus().getRegistry().getProvider(FactoryOfTheFuture.class).orElseThrow();
     }
 
     public FuturePoster futurePoster(LoggingFuturePoster futurePoster) {
@@ -63,6 +70,10 @@ public class MainBindModule {
                 .addSerialiser(new RangedLookupTableComponentText.Serializer())
                 .addSerialisers(new PossibleSound.SoundSerializer())
                 .build();
+    }
+
+    public BankAccess bankAccess(LazyVaultBankAccess bankAccess) {
+        return bankAccess;
     }
 
 }
