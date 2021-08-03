@@ -26,7 +26,7 @@ import gg.solarmc.kitpvp.config.ConfigCenter;
 import gg.solarmc.kitpvp.handler.KitTransferral;
 import gg.solarmc.kitpvp.misc.FuturePoster;
 import gg.solarmc.loader.DataCenter;
-import gg.solarmc.loader.kitpvp.ItemInSlot;
+import gg.solarmc.loader.kitpvp.KitBuilder;
 import gg.solarmc.loader.kitpvp.KitPvpKey;
 import jakarta.inject.Inject;
 import jakarta.inject.Provider;
@@ -34,8 +34,9 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.time.Duration;
+import java.time.format.DateTimeParseException;
 import java.util.Locale;
-import java.util.Set;
 
 public class AdminCommand extends BaseCommand {
 
@@ -94,14 +95,27 @@ public class AdminCommand extends BaseCommand {
                     }));
                     return;
                 }
+                Duration cooldown = Duration.ZERO;
+                if (command.hasNext()) {
+                    String cooldownArg = command.next();
+                    try {
+                        cooldown = Duration.parse(cooldownArg);
+                    } catch (DateTimeParseException ex) {
+                        sender.sendMessage(messages().invalidCooldown().replaceText("%ARGUMENT%", cooldownArg));
+                        return;
+                    }
+                }
                 if (!(sender instanceof Player player)) {
                     sender.sendMessage(Component.text("You are not a player"));
                     return;
                 }
-                Set<ItemInSlot> contents = kitTransferral.obtainItemsFromInventory(player);
+                KitBuilder.Built kitBuilder = new KitBuilder()
+                        .name(kitName)
+                        .contents(kitTransferral.obtainItemsFromInventory(player))
+                        .cooldown(cooldown)
+                        .build();
                 futurePoster.postFuture(dataCenter.transact((tx) -> {
-                    return dataCenter.getDataManager(KitPvpKey.INSTANCE)
-                            .createKit(tx, kitName, contents);
+                    return dataCenter.getDataManager(KitPvpKey.INSTANCE).createKit(tx, kitBuilder);
                 }).thenAccept((kit) -> {
                     if (kit.isEmpty()) {
                         player.sendMessage(messages().createKitAlreadyExists().replaceText("%KIT%", kitName));
