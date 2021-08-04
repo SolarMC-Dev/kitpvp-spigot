@@ -58,6 +58,7 @@ public interface Config {
         Component reloaded();
 
         @ConfKey("requires-kit-name")
+        @ConfComments("Message for createkit and deletekit when kit name not specified")
         @ConfDefault.DefaultString("&cKit name must be specified")
         Component requireKitName();
 
@@ -65,6 +66,13 @@ public interface Config {
         @ConfComments("Message when a kit is not found. Variables: %ARGUMENT%")
         @ConfDefault.DefaultString("&cKit %ARGUMENT% not found")
         ComponentText kitNotFound();
+
+        @ConfKey("invalid-cooldown")
+        @ConfComments({"Message when a cooldown argument is not a valid timespan. ",
+                "Parsing relies on Duration.parse which uses the ISO-8601 format",
+                "Variables: %ARGUMENT%"})
+        @ConfDefault.DefaultString("Specified cooldown %ARGUMENT% is not a valid ISO-8601 timespan.")
+        ComponentText invalidCooldown();
 
         @ConfKey("delete-kit-success")
         @ConfComments("Message when a kit is deleted. Variable: %KIT%")

@@ -26,6 +26,7 @@
                     <argLine>
                         --add-opens gg.solarmc.kitpvp/gg.solarmc.kitpvp.config=ALL-UNNAMED
                         --add-opens gg.solarmc.kitpvp/gg.solarmc.kitpvp.handler=ALL-UNNAMED
+                        --add-opens gg.solarmc.kitpvp/gg.solarmc.kitpvp.misc=ALL-UNNAMED
                         --add-opens gg.solarmc.kitpvp/gg.solarmc.kitpvp=ALL-UNNAMED</argLine>
                 </configuration>
             </plugin>

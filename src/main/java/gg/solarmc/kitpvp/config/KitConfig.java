@@ -49,6 +49,17 @@ public interface KitConfig {
     @ConfDefault.DefaultString("&cSorry, you do not own kit &e%KIT%&c.")
     ComponentText noOwnership();
 
+    @ConfKey("on-cooldown")
+    @ConfComments({
+            "Message when a player tries to use the kit but the cooldown has not yet elapsed",
+            "Variables:",
+            "%COOLDOWN_REMAINING% - the relative time remaining until the kit may be used again",
+            "%COOLDOWN_EXPIRATION% - the absolute date at which the kit may be used again",
+            "%KIT_COOLDOWN% - the cooldown of the kit",
+            "%KIT% - the kit name"})
+    @ConfDefault.DefaultString("&cYou must wait &e%COOLDOWN_REMAINING% &cuntil you can use kit &e%KIT% &cagain")
+    ComponentText onCooldown();
+
     @ConfKey("chose-kit")
     @ConfComments("Message when a player has chosen a kit. Variables: %KIT%")
     @ConfDefault.DefaultString("&7You have chosen kit &e%KIT%&7. Prepare yourself.")
