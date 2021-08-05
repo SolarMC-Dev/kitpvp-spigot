@@ -63,7 +63,7 @@ public class BountyCommand extends BaseCommand {
         String playerArgument = command.next();
         Player target = server.getPlayer(playerArgument);
         if (target == null) {
-            sender.sendMessage(commands().playerNotFound().replaceText("%ARGUMENT%", playerArgument));
+            sender.sendMessage(config().messages().playerNotFound().replaceText("%ARGUMENT%", playerArgument));
             return;
         }
         String targetName = target.getName();

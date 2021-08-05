@@ -50,6 +50,11 @@ public interface Config {
         @ConfDefault.DefaultString("&cSorry, you cannot use this.")
         Component noPermission();
 
+        @ConfKey("player-not-found")
+        @ConfComments("Message when player is not found. Variables: %ARGUMENT%")
+        @ConfDefault.DefaultString("&cPlayer &e%ARGUMENT%&c was not found.")
+        ComponentText playerNotFound();
+
         @ConfKey("admin-usage")
         @ConfDefault.DefaultString("&cUsage: /kitpvp-admin <reload|createkit|deletekit>.")
         Component adminUsage();
@@ -88,6 +93,21 @@ public interface Config {
         @ConfComments("Message when a kit already exists with that name. Variables: %KIT%")
         @ConfDefault.DefaultString("Unable to create %KIT% because it already exists")
         ComponentText createKitAlreadyExists();
+
+        @ConfKey("stats-success")
+        @ConfComments("Stats command message")
+        @ConfDefault.DefaultString(
+                """
+                        &7Statistics for &e%TARGET%
+                        Variables:
+                        %KILLS%, %DEATHS%, %ASSISTS%, %KDR% - self-explanatory
+                        %KILLSTREAK%, %HIGHEST_KILLSTREAK% - current killstreak and highest killstreak
+                        %EXPERIENCE% - the raw experience
+                        %LEVEL% - the level
+                        %FORMATTED_LEVEL% - the level formatted as it would be in the chat
+                        """
+        )
+        ComponentText statsSuccess();
 
     }
 
@@ -221,11 +241,6 @@ public interface Config {
             @ConfComments("Message when input is not a number. Variables: %ARGUMENT%")
             @ConfDefault.DefaultString("&cUsage: /bounty add <player> <number>. Must specify a valid number.")
             ComponentText addNotANumber();
-
-            @ConfKey("player-not-found")
-            @ConfComments("Message when player is not found. Variables: %ARGUMENT%")
-            @ConfDefault.DefaultString("&cPlayer &e%ARGUMENT%&c was not found.")
-            ComponentText playerNotFound();
 
             @ConfKey("view-message")
             @ConfComments({"/bounty view display. Variables:",
