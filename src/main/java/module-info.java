@@ -27,6 +27,8 @@ module gg.solarmc.kitpvp {
     exports gg.solarmc.kitpvp.handler.vault to space.arim.injector;
     exports gg.solarmc.kitpvp.listeners to space.arim.injector;
     exports gg.solarmc.kitpvp.misc to space.arim.injector;
+    exports gg.solarmc.kitpvp.placeholder to space.arim.injector;
+    exports gg.solarmc.kitpvp.placeholder.papi to space.arim.injector;
     exports gg.solarmc.kitpvp.provider;
     opens gg.solarmc.kitpvp.listeners to org.bukkit;
     opens gg.solarmc.kitpvp.config to space.arim.dazzleconf;

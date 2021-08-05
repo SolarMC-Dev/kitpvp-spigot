@@ -29,6 +29,8 @@ import gg.solarmc.kitpvp.handler.BankAccess;
 import gg.solarmc.kitpvp.handler.vault.LazyVaultBankAccess;
 import gg.solarmc.kitpvp.misc.FuturePoster;
 import gg.solarmc.kitpvp.misc.LoggingFuturePoster;
+import gg.solarmc.kitpvp.placeholder.PlaceholderRegistry;
+import gg.solarmc.kitpvp.placeholder.papi.PAPIPlaceholderRegistry;
 import gg.solarmc.loader.DataCenter;
 import org.bukkit.Server;
 import org.bukkit.plugin.Plugin;
@@ -74,6 +76,10 @@ public class MainBindModule {
 
     public BankAccess bankAccess(LazyVaultBankAccess bankAccess) {
         return bankAccess;
+    }
+
+    public PlaceholderRegistry placeholderRegistry(PAPIPlaceholderRegistry placeholderRegistry) {
+        return placeholderRegistry;
     }
 
 }

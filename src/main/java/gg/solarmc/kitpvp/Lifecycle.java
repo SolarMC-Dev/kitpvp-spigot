@@ -23,6 +23,7 @@ import gg.solarmc.kitpvp.commands.CommandRegistration;
 import gg.solarmc.kitpvp.config.MainConfigCenter;
 import gg.solarmc.kitpvp.listeners.KillListener;
 import gg.solarmc.kitpvp.listeners.ListenerRegistration;
+import gg.solarmc.kitpvp.placeholder.PlaceholderRegistration;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
@@ -39,8 +40,9 @@ public final class Lifecycle {
 
     @Inject
     public Lifecycle(MainConfigCenter configCenter, KillListener killListener,
-                     ListenerRegistration listenerRegistration, CommandRegistration commandRegistration) {
-        this(List.of(configCenter, killListener, listenerRegistration, commandRegistration));
+                     ListenerRegistration listenerRegistration, CommandRegistration commandRegistration,
+                     PlaceholderRegistration placeholderRegistration) {
+        this(List.of(configCenter, killListener, listenerRegistration, commandRegistration, placeholderRegistration));
     }
 
     void start() {
