@@ -34,6 +34,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 import java.time.Duration;
+import java.util.Set;
 
 @Singleton
 public class KillListener implements Listener, HasLifecycle {
@@ -61,12 +62,15 @@ public class KillListener implements Listener, HasLifecycle {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onDeath(PlayerDeathEvent deathEvent) {
-        Player dead = deathEvent.getEntity();;
+        Player dead = deathEvent.getEntity();
         DamageTracker tracker = damageTrackers.asMap().remove(dead);
         if (tracker == null) {
             return;
         }
-        killHandler.onKill(dead, tracker.lastDamager, tracker.assistants.asMap().keySet());
+        Player killer = tracker.lastDamager;
+        Set<Player> assistants = tracker.assistants.asMap().keySet();
+        assistants.remove(killer);
+        killHandler.onKill(dead, killer, assistants);
     }
 
     @Override
