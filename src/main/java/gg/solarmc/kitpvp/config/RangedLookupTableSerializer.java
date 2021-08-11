@@ -41,8 +41,13 @@ abstract class RangedLookupTableSerializer<V, T extends RangedLookupTable.WithOr
         Class<V> valueType = getValueType();
         Map<Integer, V> originalInput = flexibleType.getMap(
                 (key, value) -> Map.entry(key.getInteger(), value.getObject(valueType)));
+        return fromValueRanges(originalInput);
+    }
+
+    // Extrapolated for purposes of direct construction
+    T fromValueRanges(Map<Integer, V> originalInput) {
         @SuppressWarnings("unchecked")
-        IntFunction<V[]> arrayGenerator = (size) -> (V[]) Array.newInstance(valueType, size);
+        IntFunction<V[]> arrayGenerator = (size) -> (V[]) Array.newInstance(getValueType(), size);
         return fromDelegate(
                 RangedLookupTable.fromValueRanges(originalInput, arrayGenerator),
                 originalInput);

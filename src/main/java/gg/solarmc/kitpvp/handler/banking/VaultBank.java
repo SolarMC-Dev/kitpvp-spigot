@@ -17,9 +17,8 @@
  * and navigate to version 3 of the GNU Affero General Public License.
  */
 
-package gg.solarmc.kitpvp.handler.vault;
+package gg.solarmc.kitpvp.handler.banking;
 
-import gg.solarmc.kitpvp.handler.BankAccess;
 import gg.solarmc.loader.Transaction;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
@@ -28,12 +27,12 @@ import space.arim.omnibus.util.concurrent.FactoryOfTheFuture;
 
 import java.math.BigDecimal;
 
-public final class VaultBankAccess implements BankAccess {
+public final class VaultBank implements Bank {
 
     private final Economy vaultEco;
     private final FactoryOfTheFuture futuresFactory;
 
-    public VaultBankAccess(Economy vaultEco, FactoryOfTheFuture futuresFactory) {
+    public VaultBank(Economy vaultEco, FactoryOfTheFuture futuresFactory) {
         this.vaultEco = vaultEco;
         this.futuresFactory = futuresFactory;
     }

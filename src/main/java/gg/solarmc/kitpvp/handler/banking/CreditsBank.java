@@ -17,36 +17,25 @@
  * and navigate to version 3 of the GNU Affero General Public License.
  */
 
-package gg.solarmc.kitpvp.handler;
+package gg.solarmc.kitpvp.handler.banking;
 
 import gg.solarmc.loader.Transaction;
+import gg.solarmc.loader.credits.CreditsKey;
 import org.bukkit.entity.Player;
 
 import java.math.BigDecimal;
-import java.util.Objects;
 
-public interface BankAccess {
+public final class CreditsBank implements Bank {
 
-    DepositResult depositBalance(Transaction tx, Player user, BigDecimal amount);
-
-    record DepositResult(BigDecimal newBalance) {
-        public DepositResult {
-            Objects.requireNonNull(newBalance, "newBalance");
-        }
+    @Override
+    public DepositResult depositBalance(Transaction tx, Player user, BigDecimal amount) {
+        var result = user.getSolarPlayer().getData(CreditsKey.INSTANCE).depositBalance(tx, amount);
+        return new DepositResult(result.newBalance());
     }
 
-    WithdrawResult withdrawBalance(Transaction tx, Player user, BigDecimal amount);
-
-    record WithdrawResult(boolean success, BigDecimal newBalance) {
-
-        public WithdrawResult {
-            Objects.requireNonNull(newBalance, "newBalance");
-        }
-
-        // Alias
-        public boolean isSuccessful() {
-            return success;
-        }
+    @Override
+    public WithdrawResult withdrawBalance(Transaction tx, Player user, BigDecimal amount) {
+        var result = user.getSolarPlayer().getData(CreditsKey.INSTANCE).withdrawBalance(tx, amount);
+        return new WithdrawResult(result.isSuccessful(), result.newBalance());
     }
-
 }

@@ -17,11 +17,11 @@
  * and navigate to version 3 of the GNU Affero General Public License.
  */
 
-package gg.solarmc.kitpvp.handler.vault;
+package gg.solarmc.kitpvp.handler.banking;
 
-import gg.solarmc.kitpvp.handler.BankAccess;
 import gg.solarmc.loader.Transaction;
 import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
@@ -29,21 +29,22 @@ import space.arim.omnibus.util.concurrent.FactoryOfTheFuture;
 
 import java.math.BigDecimal;
 
-public final class LazyVaultBankAccess implements BankAccess {
+@Singleton
+public final class LazyVaultBank implements Bank {
 
     private final Server server;
     private final FactoryOfTheFuture futuresFactory;
 
-    private BankAccess delegate;
+    private Bank delegate;
 
     @Inject
-    public LazyVaultBankAccess(Server server, FactoryOfTheFuture futuresFactory) {
+    public LazyVaultBank(Server server, FactoryOfTheFuture futuresFactory) {
         this.server = server;
         this.futuresFactory = futuresFactory;
     }
 
-    private BankAccess delegate() {
-        BankAccess delegate = this.delegate;
+    private Bank delegate() {
+        Bank delegate = this.delegate;
         if (delegate == null) {
             delegate = findDelegate();
             this.delegate = delegate;
@@ -51,14 +52,14 @@ public final class LazyVaultBankAccess implements BankAccess {
         return delegate;
     }
 
-    private BankAccess findDelegate() {
+    private Bank findDelegate() {
         return futuresFactory.supplySync(() -> {
             Economy vaultEco = server.getServicesManager().load(Economy.class);
             if (vaultEco == null) {
                 throw new IllegalStateException(
                         "No Vault Economy provider registered. An economy plugin must be installed");
             }
-            return new VaultBankAccess(vaultEco, futuresFactory);
+            return new VaultBank(vaultEco, futuresFactory);
         }).join();
     }
 

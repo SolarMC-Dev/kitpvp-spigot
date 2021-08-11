@@ -39,7 +39,7 @@ public interface KitConfig {
 
         @ConfKey("selectkit-not-found")
         @ConfComments("Message when the specified kit was not found. Variables: %ARGUMENT%")
-        @ConfDefault.DefaultString("&cKit &e%KIT%&c not found")
+        @ConfDefault.DefaultString("&cKit &e%ARGUMENT%&c not found")
         ComponentText selectKitNotFound();
 
     }

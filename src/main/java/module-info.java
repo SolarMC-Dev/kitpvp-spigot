@@ -20,11 +20,12 @@ module gg.solarmc.kitpvp {
     requires space.arim.dazzleconf;
     requires space.arim.dazzleconf.ext.snakeyaml;
     requires space.arim.injector;
+    requires space.arim.omnibus;
     exports gg.solarmc.kitpvp to space.arim.injector;
     exports gg.solarmc.kitpvp.commands to space.arim.injector;
     exports gg.solarmc.kitpvp.config to space.arim.injector;
     exports gg.solarmc.kitpvp.handler to space.arim.injector;
-    exports gg.solarmc.kitpvp.handler.vault to space.arim.injector;
+    exports gg.solarmc.kitpvp.handler.banking to space.arim.injector;
     exports gg.solarmc.kitpvp.listeners to space.arim.injector;
     exports gg.solarmc.kitpvp.misc to space.arim.injector;
     exports gg.solarmc.kitpvp.placeholder to space.arim.injector;

@@ -22,6 +22,7 @@ package gg.solarmc.kitpvp.handler;
 import gg.solarmc.kitpvp.config.Config;
 import gg.solarmc.kitpvp.config.ConfigCenter;
 import gg.solarmc.kitpvp.config.Violence;
+import gg.solarmc.kitpvp.handler.banking.Bank;
 import gg.solarmc.kitpvp.misc.FuturePoster;
 import gg.solarmc.loader.DataCenter;
 import gg.solarmc.loader.Transaction;
@@ -42,18 +43,18 @@ public class KillHandler {
     private final DataCenter dataCenter;
     private final FuturePoster futurePoster;
     private final ConfigCenter configCenter;
-    private final BankAccess bankAccess;
+    private final Bank centralBank;
     private final BountyManager bountyManager;
     private final LevelCalculator levelCalculator;
 
     @Inject
     public KillHandler(DataCenter dataCenter, FuturePoster futurePoster,
-                       ConfigCenter configCenter, BankAccess bankAccess,
+                       ConfigCenter configCenter, Bank centralBank,
                        BountyManager bountyManager, LevelCalculator levelCalculator) {
         this.dataCenter = dataCenter;
         this.futurePoster = futurePoster;
         this.configCenter = configCenter;
-        this.bankAccess = bankAccess;
+        this.centralBank = centralBank;
         this.bountyManager = bountyManager;
         this.levelCalculator = levelCalculator;
     }
@@ -120,7 +121,7 @@ public class KillHandler {
             BigDecimal rewardPerAssist = violence().killRewards().assistReward();
             for (Player assistant : assistants) {
                 assistant.getSolarPlayer().getData(KitPvpKey.INSTANCE).addAssists(tx, 1);
-                BankAccess.DepositResult depositResult = bankAccess.depositBalance(tx, assistant, rewardPerAssist);
+                Bank.DepositResult depositResult = centralBank.depositBalance(tx, assistant, rewardPerAssist);
                 kill.assistedKillReward(assistant, rewardPerAssist, depositResult);
             }
         }
@@ -129,7 +130,7 @@ public class KillHandler {
         {
             BigDecimal killReward = violence().killRewards().killReward()
                     .findValue(killerNewKillstreak).orElse(BigDecimal.ZERO);
-            BankAccess.DepositResult depositResult = bankAccess.depositBalance(tx, killer, killReward);
+            Bank.DepositResult depositResult = centralBank.depositBalance(tx, killer, killReward);
             kill.mainKillReward(killReward, depositResult);
         }
 
@@ -183,7 +184,7 @@ public class KillHandler {
         }
 
         private void assistedKillReward(Player assistant,
-                                        BigDecimal assistReward, BankAccess.DepositResult depositResult) {
+                                        BigDecimal assistReward, Bank.DepositResult depositResult) {
             addCallback(() -> {
                 ComponentLike rewardMessage = violence().killRewards().assistedKillMessage()
                         .replaceText("%ASSIST_REWARD%", assistReward.toPlainString())
@@ -193,7 +194,7 @@ public class KillHandler {
             });
         }
 
-        private void mainKillReward(BigDecimal killReward, BankAccess.DepositResult depositResult) {
+        private void mainKillReward(BigDecimal killReward, Bank.DepositResult depositResult) {
             addCallback(() -> {
                 ComponentLike rewardMessage = violence().killRewards().rewardedKillMessage()
                         .replaceText("%KILL_REWARD%", killReward.toPlainString())

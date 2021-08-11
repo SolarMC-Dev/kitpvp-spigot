@@ -24,7 +24,6 @@ import net.kyori.adventure.text.Component;
 import space.arim.api.jsonchat.adventure.util.ComponentText;
 import space.arim.dazzleconf.annote.ConfComments;
 import space.arim.dazzleconf.annote.ConfDefault;
-import space.arim.dazzleconf.annote.ConfHeader;
 import space.arim.dazzleconf.annote.ConfKey;
 import space.arim.dazzleconf.annote.SubSection;
 
@@ -54,6 +53,11 @@ public interface Config {
         @ConfComments("Message when player is not found. Variables: %ARGUMENT%")
         @ConfDefault.DefaultString("&cPlayer &e%ARGUMENT%&c was not found.")
         ComponentText playerNotFound();
+
+        @ConfKey("page-does-not-exist")
+        @ConfComments("Message when the given page does not exist. Variables: %ARGUMENT%")
+        @ConfDefault.DefaultString("&cPage %ARGUMENT% does not exist.")
+        ComponentText pageDoesNotExist();
 
         @ConfKey("admin-usage")
         @ConfDefault.DefaultString("&cUsage: /kitpvp-admin <reload|createkit|deletekit>.")
@@ -95,16 +99,20 @@ public interface Config {
         ComponentText createKitAlreadyExists();
 
         @ConfKey("stats-success")
-        @ConfComments("Stats command message")
+        @ConfComments({"Stats command message",
+                "Variables:",
+                "%TARGET% - the user whose stats is shown",
+                "%KILLS%, %DEATHS%, %ASSISTS%, %KDR% - self-explanatory",
+                "%KILLSTREAK%, %HIGHEST_KILLSTREAK% - current killstreak and highest killstreak",
+                "%EXPERIENCE% - the raw experience",
+                "%LEVEL% - the level",
+                "%FORMATTED_LEVEL% - the level formatted as it would be in the chat"})
         @ConfDefault.DefaultString(
                 """
                         &7Statistics for &e%TARGET%
-                        Variables:
-                        %KILLS%, %DEATHS%, %ASSISTS%, %KDR% - self-explanatory
-                        %KILLSTREAK%, %HIGHEST_KILLSTREAK% - current killstreak and highest killstreak
-                        %EXPERIENCE% - the raw experience
-                        %LEVEL% - the level
-                        %FORMATTED_LEVEL% - the level formatted as it would be in the chat
+                        Kills, deaths, assists, kdr: %KILLS%, %DEATHS%, %ASSISTS%, %KDR%
+                        Killstreak, Highest killstreak: %KILLSTREAK%, %HIGHEST_KILLSTREAK%
+                        Level: %FORMATTED_LEVEL%
                         """
         )
         ComponentText statsSuccess();
@@ -113,151 +121,6 @@ public interface Config {
 
     @SubSection
     Bounties bounties();
-
-    interface Bounties {
-
-        @ConfComments({"Message when the player does not have enough money to place a bounty. Variables:",
-                "%BOUNTY_ADDED% - the amount which would have been added",
-                "%AVAILABLE_FUNDS% - the player's balance",
-                "%BOUNTY_TARGET% - whom the bounty would be placed on"})
-        @ConfDefault.DefaultString("Not enough funds to place %BOUNTY_ADDED% ON %BOUNTY_TARGET%. You have only %AVAILABLE_FUNDS%")
-        ComponentText notEnoughFunds();
-
-        @ConfKey("placed-bounty")
-        @ConfComments({"Message when a player has placed or updated a bounty on another. Variables:",
-                "%BOUNTY_ADDED% - the amount added",
-                "%BOUNTY_NEW% - the new bounty on the target",
-                "%BOUNTY_TARGET% - whom the bounty was placed on",
-                ""})
-        @ConfDefault.DefaultString("Placed a bounty of %BOUNTY_ADDED% on %BOUNTY_TARGET%, for a total bounty of %BOUNTY_NEW%.")
-        ComponentText placedBounty();
-
-        @ConfKey("placed-bounty-broadcast")
-        @ConfComments({"Message when a player has placed or updated a bounty on another. Variables:",
-                "%BOUNTY_ADDED% - the amount added",
-                "%BOUNTY_NEW% - the new bounty on the target",
-                "%BOUNTY_TARGET% - whom the bounty was placed on",
-                "%BOUNTY_MALEFACTOR% - the player who placed the bounty ",
-                ""})
-        @ConfDefault.DefaultString("%BOUNTY_MALEFACTOR% placed a bounty of %BOUNTY_ADDED% on %BOUNTY_TARGET%, for a total bounty of %BOUNTY_NEW%.")
-        ComponentText placedBountyBroadcast();
-
-        @ConfKey("claimed-bounty")
-        @ConfComments({"Message sent to the killer when a bounty is claimed. ",
-                "Set to empty to disable. Variables:",
-                "%BOUNTY_VALUE% - the claimed bounty value",
-                "%BOUNTY_VALUE_EXPLICIT% - the bounty value of which was explicit due to placed bounties",
-                "%BOUNTY_VALUE_IMPLICIT% - the bounty value of which was implicit due to the victim's killstreak",
-                "%BOUNTY_TARGET% - whom the bounty was claimed on"})
-        @ConfDefault.DefaultString("You claimed a bounty of %BOUNTY_VALUE% on %BOUNTY_TARGET%.")
-        ComponentText claimedBounty();
-
-        @ConfKey("claimed-bounty-message")
-        @ConfComments({"Broadcasted message sent to everyone when a bounty is claimed. ",
-                "Set to empty to disable. Variables:",
-                "%BOUNTY_VALUE% - the claimed bounty value",
-                "%BOUNTY_VALUE_EXPLICIT% - the bounty value of which was explicit due to placed bounties",
-                "%BOUNTY_VALUE_IMPLICIT% - the bounty value of which was implicit due to the victim's killstreak",
-                "%BOUNTY_TARGET% - whom the bounty was claimed on",
-                "%BOUNTY_CLAIMANT% - who claimed the bounty"})
-        @ConfDefault.DefaultString("%BOUNTY_CLAIMAINT% claimed a bounty of %BOUNTY_ADDED% on %BOUNTY_TARGET%.")
-        ComponentText claimedBountyBroadcast();
-
-        @ConfKey("implicit-bounties")
-        @SubSection
-        ImplicitBounties implicitBounties();
-
-        @ConfHeader({
-                "An implicit bounty is one which exists on a player dependent on that player's killstreak.",
-                "This is not a bounty in the traditional sense, but rather a calculated additional reward",
-                "given to players who kill others with a high killstreak.",
-                "",
-                "Internally, the implicit bounty is tracked separately from placed bounties; the implicit",
-                "bounty is calculated based on the player's killstreak at the time of death.",
-                "",
-                "Also, if enabled, the victim with the killstreak additionally receives the same implicit bounty"
-        })
-        interface ImplicitBounties {
-
-            @ConfKey("killstreak-implicit-bounties")
-            @ConfComments({
-                    "Defines the implicit bounty which exists on players with the given killstreaks.",
-            })
-            @ConfDefault.DefaultMap({
-                    "50", "1500",
-                    "100", "3000",
-                    "150", "5000",
-                    "200", "7000",
-                    "250", "10000"
-            })
-            RangedLookupTableBigDecimal killstreakImplicitBounties();
-
-            @ConfKey("victim-receives-implicit-bounty")
-            @ConfComments("When enabled, the victim also receives any implicit bounty which existed due to their high killstreak")
-            @ConfDefault.DefaultBoolean(true)
-            boolean victimReceivesImplicitBounty();
-
-            @ConfKey("implicit-bounty-message-killer")
-            @ConfComments({"The message to the killer when they receive the implicit bounty.",
-                    "Usually, you can disable this message and use the claimed-bounty-message.",
-                    "Set to empty to disable. Variables:",
-                    "%IMPLICIT_BOUNTY% - the value claimed through the implicit bounty",
-                    "%VICTIM% - the name of the victim",
-                    "%VICTIM_KILLSTREAK% - the killstreak the victim had"})
-            @ConfDefault.DefaultString("You gained an additional reward of %IMPLICIT_BOUNTY% " +
-                    "for killing %VICTIM% who had a %VICTIM_KILLSTREAK% killstreak")
-            ComponentText implicitBountyMessageKiller();
-
-            @ConfKey("implicit-bounty-message-victim")
-            @ConfComments({"The message to a victim when they receive the implicit bounty.",
-                    "Set to empty to disable. Variables:",
-                    "%IMPLICIT_BOUNTY% - the value claimed through the implicit bounty",
-                    "%KILLER% - the name of the killer",
-                    "%VICTIM_KILLSTREAK% - the killstreak the victim had"})
-            @ConfDefault.DefaultString("You gained an implicit bounty of %IMPLICIT_BOUNTY% f" +
-                    "or achieving such a high killstreak of %VICTIM_KILLSTREAK%.")
-            ComponentText implicitBountyMessageVictim();
-
-        }
-
-        @SubSection
-        Commands commands();
-
-        interface Commands {
-
-            @ConfKey("usage")
-            @ConfDefault.DefaultString("&cUsage: /bounty <add|view> <player>")
-            Component usage();
-
-            @ConfKey("usage-add")
-            @ConfDefault.DefaultString("&cUsage: /bounty add <player> <number>")
-            Component usageAdd();
-
-            @ConfKey("usage-view")
-            @ConfDefault.DefaultString("&cUsage: /bounty view <player>")
-            Component usageView();
-
-            @ConfKey("add-not-a-number")
-            @ConfComments("Message when input is not a number. Variables: %ARGUMENT%")
-            @ConfDefault.DefaultString("&cUsage: /bounty add <player> <number>. Must specify a valid number.")
-            ComponentText addNotANumber();
-
-            @ConfKey("view-message")
-            @ConfComments({"/bounty view display. Variables:",
-                    "%TARGET% - the target player",
-                    "%BOUNTY_VALUE% - the bounty value"})
-            @ConfDefault.DefaultString("&7The bounty on &e%TARGET%&7 is &5%BOUNTY_VALUE%&7.")
-            ComponentText viewMessage();
-
-            @ConfKey("view-message-no-bounty")
-            @ConfComments({"/bounty view display when there is no bounty. Variables:",
-                    "%TARGET% - the target player"})
-            @ConfDefault.DefaultString("&7There is no bounty on &e%TARGET%&7.")
-            ComponentText viewMessageNoBounty();
-
-        }
-
-    }
 
     @SubSection
     Levels levels();

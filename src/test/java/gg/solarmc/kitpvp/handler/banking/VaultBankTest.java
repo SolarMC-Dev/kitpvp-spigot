@@ -17,9 +17,8 @@
  * and navigate to version 3 of the GNU Affero General Public License.
  */
 
-package gg.solarmc.kitpvp.handler.vault;
+package gg.solarmc.kitpvp.handler.banking;
 
-import gg.solarmc.kitpvp.handler.BankAccess;
 import gg.solarmc.loader.Transaction;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
@@ -41,18 +40,18 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class VaultBankAccessTest {
+public class VaultBankTest {
 
     private final Economy economy;
-    private BankAccess bankAccess;
+    private Bank bank;
 
-    public VaultBankAccessTest(@Mock Economy economy) {
+    public VaultBankTest(@Mock Economy economy) {
         this.economy = economy;
     }
 
     @BeforeEach
     public void setBankAccess() {
-        bankAccess = new VaultBankAccess(economy, new IndifferentFactoryOfTheFuture());
+        bank = new VaultBank(economy, new IndifferentFactoryOfTheFuture());
     }
 
     private void assertEqualBigDecimals(BigDecimal expected, BigDecimal actual) {
@@ -65,21 +64,21 @@ public class VaultBankAccessTest {
     public void depositBalance(@Mock Transaction tx, @Mock Player player) {
         when(economy.depositPlayer(eq(player), anyDouble()))
                 .thenReturn(new EconomyResponse(1D, 10D, EconomyResponse.ResponseType.SUCCESS, ""));
-        BankAccess.DepositResult depositResult = bankAccess.depositBalance(tx, player, BigDecimal.ONE);
+        Bank.DepositResult depositResult = bank.depositBalance(tx, player, BigDecimal.ONE);
         assertEqualBigDecimals(BigDecimal.TEN, depositResult.newBalance());
     }
 
     @Test
     public void depositBalanceNonPositive(@Mock Transaction tx, @Mock Player player) {
-        assertThrows(IllegalArgumentException.class, () -> bankAccess.depositBalance(tx, player, BigDecimal.ZERO));
-        assertThrows(IllegalArgumentException.class, () -> bankAccess.depositBalance(tx, player, BigDecimal.valueOf(-1L)));
+        assertThrows(IllegalArgumentException.class, () -> bank.depositBalance(tx, player, BigDecimal.ZERO));
+        assertThrows(IllegalArgumentException.class, () -> bank.depositBalance(tx, player, BigDecimal.valueOf(-1L)));
     }
 
     @Test
     public void withdrawBalance(@Mock Transaction tx, @Mock Player player) {
         when(economy.withdrawPlayer(eq(player), anyDouble()))
                 .thenReturn(new EconomyResponse(1D, 10D, EconomyResponse.ResponseType.SUCCESS, ""));
-        BankAccess.WithdrawResult depositResult = bankAccess.withdrawBalance(tx, player, BigDecimal.ONE);
+        Bank.WithdrawResult depositResult = bank.withdrawBalance(tx, player, BigDecimal.ONE);
         assertTrue(depositResult.isSuccessful());
         assertEqualBigDecimals(BigDecimal.TEN, depositResult.newBalance());
     }
@@ -88,14 +87,14 @@ public class VaultBankAccessTest {
     public void withdrawBalanceInsufficientFunds(@Mock Transaction tx, @Mock Player player) {
         when(economy.withdrawPlayer(eq(player), anyDouble()))
                 .thenReturn(new EconomyResponse(1D, 10D, EconomyResponse.ResponseType.FAILURE, "Failed"));
-        BankAccess.WithdrawResult depositResult = bankAccess.withdrawBalance(tx, player, BigDecimal.ONE);
+        Bank.WithdrawResult depositResult = bank.withdrawBalance(tx, player, BigDecimal.ONE);
         assertFalse(depositResult.isSuccessful());
         assertEqualBigDecimals(BigDecimal.TEN, depositResult.newBalance());
     }
 
     @Test
     public void withdrawBalanceNonPositive(@Mock Transaction tx, @Mock Player player) {
-        assertThrows(IllegalArgumentException.class, () -> bankAccess.withdrawBalance(tx, player, BigDecimal.ZERO));
-        assertThrows(IllegalArgumentException.class, () -> bankAccess.withdrawBalance(tx, player, BigDecimal.valueOf(-1L)));
+        assertThrows(IllegalArgumentException.class, () -> bank.withdrawBalance(tx, player, BigDecimal.ZERO));
+        assertThrows(IllegalArgumentException.class, () -> bank.withdrawBalance(tx, player, BigDecimal.valueOf(-1L)));
     }
 }

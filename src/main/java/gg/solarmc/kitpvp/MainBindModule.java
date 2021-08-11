@@ -25,8 +25,8 @@ import gg.solarmc.kitpvp.config.MainConfigCenter;
 import gg.solarmc.kitpvp.config.PossibleSound;
 import gg.solarmc.kitpvp.config.RangedLookupTableBigDecimal;
 import gg.solarmc.kitpvp.config.RangedLookupTableComponentText;
-import gg.solarmc.kitpvp.handler.BankAccess;
-import gg.solarmc.kitpvp.handler.vault.LazyVaultBankAccess;
+import gg.solarmc.kitpvp.handler.banking.Bank;
+import gg.solarmc.kitpvp.handler.banking.LazyVaultBank;
 import gg.solarmc.kitpvp.misc.FuturePoster;
 import gg.solarmc.kitpvp.misc.LoggingFuturePoster;
 import gg.solarmc.kitpvp.placeholder.PlaceholderRegistry;
@@ -74,8 +74,8 @@ public class MainBindModule {
                 .build();
     }
 
-    public BankAccess bankAccess(LazyVaultBankAccess bankAccess) {
-        return bankAccess;
+    public Bank centralBank(LazyVaultBank bank) {
+        return bank;
     }
 
     public PlaceholderRegistry placeholderRegistry(PAPIPlaceholderRegistry placeholderRegistry) {

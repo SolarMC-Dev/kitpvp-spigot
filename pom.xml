@@ -14,7 +14,7 @@
     <version>0.2.0-SNAPSHOT</version>
 
     <properties>
-        <dataloader.version>0.5.2-SNAPSHOT</dataloader.version>
+        <dataloader.version>0.6.0-SNAPSHOT</dataloader.version>
     </properties>
 
     <build>
@@ -26,7 +26,7 @@
                     <argLine>
                         --add-opens gg.solarmc.kitpvp/gg.solarmc.kitpvp.config=ALL-UNNAMED
                         --add-opens gg.solarmc.kitpvp/gg.solarmc.kitpvp.handler=ALL-UNNAMED
-                        --add-opens gg.solarmc.kitpvp/gg.solarmc.kitpvp.handler.vault=ALL-UNNAMED
+                        --add-opens gg.solarmc.kitpvp/gg.solarmc.kitpvp.handler.banking=ALL-UNNAMED
                         --add-opens gg.solarmc.kitpvp/gg.solarmc.kitpvp.listeners=ALL-UNNAMED
                         --add-opens gg.solarmc.kitpvp/gg.solarmc.kitpvp.misc=ALL-UNNAMED
                         --add-opens gg.solarmc.kitpvp/gg.solarmc.kitpvp=ALL-UNNAMED</argLine>
