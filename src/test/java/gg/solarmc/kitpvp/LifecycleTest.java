@@ -20,6 +20,7 @@
 package gg.solarmc.kitpvp;
 
 import org.junit.jupiter.api.Test;
+import space.arim.api.util.testing.InjectableConstructor;
 
 public class LifecycleTest {
 

@@ -19,8 +19,8 @@
 
 package gg.solarmc.kitpvp.commands;
 
-import gg.solarmc.kitpvp.InjectableConstructor;
 import org.junit.jupiter.api.Test;
+import space.arim.api.util.testing.InjectableConstructor;
 
 public class CommandRegistrationTest {
 

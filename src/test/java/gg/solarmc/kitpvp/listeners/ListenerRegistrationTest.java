@@ -19,9 +19,9 @@
 
 package gg.solarmc.kitpvp.listeners;
 
-import gg.solarmc.kitpvp.InjectableConstructor;
 import org.bukkit.event.Listener;
 import org.junit.jupiter.api.Test;
+import space.arim.api.util.testing.InjectableConstructor;
 
 public class ListenerRegistrationTest {
 

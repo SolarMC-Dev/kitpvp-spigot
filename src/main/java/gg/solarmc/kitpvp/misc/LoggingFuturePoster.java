@@ -21,6 +21,7 @@ package gg.solarmc.kitpvp.misc;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import space.arim.omnibus.util.ThisClass;
 import space.arim.omnibus.util.concurrent.CentralisedFuture;
 
 import java.util.concurrent.TimeUnit;
@@ -28,18 +29,15 @@ import java.util.concurrent.TimeoutException;
 
 public final class LoggingFuturePoster implements FuturePoster {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(getClass());
+    private static final Logger LOGGER = LoggerFactory.getLogger(ThisClass.get());
 
     @Override
     public void postFuture(CentralisedFuture<?> future) {
         future.exceptionally((ex) -> {
             LOGGER.warn("Encountered miscellaneous exception", ex);
             return null;
-        });
-        future.copy().orTimeout(10L, TimeUnit.SECONDS).exceptionally((ex) -> {
-            if (ex instanceof TimeoutException) {
-                LOGGER.warn("Future took more than 10 seconds to complete", ex);
-            }
+        }).orTimeout(10L, TimeUnit.SECONDS).exceptionally((ex) -> {
+            LOGGER.warn("Future took more than 10 seconds to complete", ex);
             return null;
         });
     }
