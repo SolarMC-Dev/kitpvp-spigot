@@ -16,7 +16,7 @@
     <properties>
         <dataloader.version>0.6.0-SNAPSHOT</dataloader.version>
         <solarpaper.version>1.2.1-SNAPSHOT</solarpaper.version>
-        <arimapi.version>0.24.7</arimapi.version>
+        <arimapi.version>0.24.8</arimapi.version>
     </properties>
 
     <build>

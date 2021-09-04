@@ -21,11 +21,10 @@ package gg.solarmc.kitpvp.handler;
 
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
-import net.kyori.adventure.text.TextComponent;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import space.arim.api.jsonchat.adventure.util.ComponentText;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,11 +91,10 @@ class Kill implements KillCallback {
     }
 
     void sendMessageIfNotEmpty(Audience target, ComponentLike message) {
-        Component component = message.asComponent();
-        if (component instanceof TextComponent tc && tc.content().isEmpty()) {
+        if (ComponentText.create(message.asComponent()).isEmpty()) {
             return;
         }
-        addSyncCallback(() -> target.sendMessage(component));
+        addSyncCallback(() -> target.sendMessage(message));
     }
 
     @Override
